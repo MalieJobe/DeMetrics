@@ -33,3 +33,81 @@ Wenn wir jetzt noch die Kategorie "Einkommen" hinzunehmen:
 - 30% dieser Frauen zwischen 20 und 30 Jahren verdienen zwischen 20.000 und 30.000 Euro im Jahr, also 0,2352 Millionen Frauen.
 
 Dieses Beispiel zeigt, dass die tatsächliche Anzahl der Personen, die alle Kriterien erfüllen, durch die multiplikative Kombination der Prozentsätze schnell kleiner wird. Jede zusätzliche Kategorie, die berücksichtigt wird, reduziert die Anzahl der passenden Personen weiter. Daher ist es wichtig, die Interdependenzen zwischen den Kategorien genau zu erfassen, um die Berechnungen korrekt und realistisch zu gestalten.
+
+
+
+# Nuxt 3 Minimal Starter
+
+Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+
+## Setup
+
+Make sure to install the dependencies:
+
+```bash
+# npm
+npm install
+
+# pnpm
+pnpm install
+
+# yarn
+yarn install
+
+# bun
+bun install
+```
+
+## Development Server
+
+Start the development server on `http://localhost:3000`:
+
+```bash
+# npm
+npm run dev
+
+# pnpm
+pnpm run dev
+
+# yarn
+yarn dev
+
+# bun
+bun run dev
+```
+
+## Production
+
+Build the application for production:
+
+```bash
+# npm
+npm run build
+
+# pnpm
+pnpm run build
+
+# yarn
+yarn build
+
+# bun
+bun run build
+```
+
+Locally preview production build:
+
+```bash
+# npm
+npm run preview
+
+# pnpm
+pnpm run preview
+
+# yarn
+yarn preview
+
+# bun
+bun run preview
+```
+
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
