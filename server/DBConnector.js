@@ -141,7 +141,7 @@ export default class DBConnector {
     async getSinglesPercentage(minAge, maxAge) {
         if (minAge > maxAge) throw new Error("minAge must be less than or equal to maxAge");
 
-        const sql = `SELECT SUM(singles_in_age_group) FROM singles WHERE age_lower >= ? AND age_uppper <= ?`;
+        const sql = `SELECT SUM(singles_in_age_group) FROM singles WHERE age_lower >= ? AND age_upper <= ?`;
         return await this.getSingleRow(sql, [minAge, maxAge]);
     }
 
