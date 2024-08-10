@@ -115,21 +115,6 @@ export default class DBConnector {
 
         let sql;
         if (gender === 'total') {
-            /**
-             * Age_Group	Gender	Underweight_Percentage	Normalweight_Percentage	Overweight_Percentage	Obese_Percentage
-                18 und mehr	Male	1,2	38,2	41,6	19,1
-                18 - 25	Male	4,4	65,1	25	5,6
-                25 - 35	Male	1	48,8	34,8	15,4
-                35 - 45	Male	0,9	38,9	40,1	20
-                45 - 55	Male	0,7	30,8	45,1	23,4
-                55 - 65	Male	1,3	30	45,1	23,7
-                65 - 75	Male	0,4	26,7	48,4	24,5
-                75 und mehr	Male	0,6	36,3	48,8	14,3
-                18 und mehr	Female	3,4	50	27,5	19
-                18 - 25	Female	7,6	66,7	15,7	9,9
-                25 - 35	Female	7,3	62,1	19,9	10,7
-             */
-
             // todo ausgiebig testen
             sql = `SELECT SUM(${selectedWeights.join(' + ')}) / ${selectedWeights.length} FROM weight WHERE age_lower >= ? AND age_upper <= ?`;
         } else {
