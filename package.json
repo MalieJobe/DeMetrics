@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxtjs/tailwindcss": "^6.12.1",
     "nuxt": "^3.12.4",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",

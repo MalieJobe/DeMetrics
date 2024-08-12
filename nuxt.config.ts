@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
+
   vite: {
     build: {
       target: 'es2022'
@@ -11,5 +12,7 @@ export default defineNuxtConfig({
         target: 'es2022'
       }
     }
-  }
+  },
+
+  modules: ["@nuxtjs/tailwindcss"]
 })
