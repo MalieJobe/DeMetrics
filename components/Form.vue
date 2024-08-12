@@ -1,17 +1,25 @@
 <script setup>
-const bla = ref('bla');
-const { data, status, error } = await useFetch('/api/db_connector', {
-    params: {
-        type: 'age',
-        minAge: 20,
-        maxAge: 23,
-        gender: 'female'
-    }
-});
+import RangeSlider from './RangeSlider.vue';
 
-console.log(data.value);
+// const { data, status, error } = await useFetch('/api/db_connector', {
+//     params: {
+//         type: 'age',
+//         minAge: 20,
+//         maxAge: 23,
+//         gender: 'female'
+//     }
+// });
+
+const selectedRange = ref({ min: 0, max: 100 });
+
+const onRangeChange = (range) => {
+    selectedRange.value = range;
+};
+
 </script>
 <template>
-    <p>hello world</p>
-    <p>and {{ data }}</p>
+    <RangeSlider :minValue="0" :maxValue="100" @change="onRangeChange" />
+    <p>Range: {{ selectedRange.min }} - {{ selectedRange.max }}</p>
+
+
 </template>
