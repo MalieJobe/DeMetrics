@@ -1,10 +1,10 @@
 <template>
-    <div class="range_container">
-        <div class="sliders_control">
-            <input class="fromSlider" type="range" v-model="range.min" :min="props.from" :max="props.to"
-                :step="stepSize" />
-            <input class="toSlider" type="range" v-model="range.max" :min="props.from" :max="props.to" :step="stepSize"
-                :style="{ background: rangeGradient }" />
+    <div class="range_container flex flex-col w-full my-2 mx-auto">
+        <div class="sliders_control relative min-h-5 mt-5">
+            <input class="fromSlider" type="range" v-model.number="range.min" :min="props.from" :max="props.to"
+                :step="stepSize" @input="updateSliderPosition" />
+            <input class="toSlider" type="range" v-model.number="range.max" :min="props.from" :max="props.to"
+                :step="stepSize" :style="{ background: rangeGradient }" @input="updateSliderPosition" />
         </div>
     </div>
 </template>
@@ -21,23 +21,22 @@ const props = defineProps({
     stepSize: { type: Number, default: 1 },
 });
 
-// todo: range is initially number. but when slider is moved it becomes string.
-// works fine for division in calculateGradient but not for comparison in watch.
 const range = ref({ min: props.minStart, max: props.maxStart });
 const rangeGradient = ref('');
 const rangeActiveColor = "#e364b3";
 
-watch(range, () => {
-    console.log("changed", range.value.min, range.value.max);
+function updateSliderPosition(event) {
     if (range.value.min > range.value.max) {
-        range.value.max = range.value.min;
-    }
-    if (range.value.max < range.value.min) {
-        range.value.min = range.value.max;
+        const activeSlider = event.target.classList.contains('fromSlider') ? 'from' : 'to';
+        if (activeSlider === 'from') {
+            range.value.max = range.value.min;
+        } else {
+            range.value.min = range.value.max;
+        }
     }
     rangeGradient.value = calculateGradient('#C6C6C6', rangeActiveColor);
     emitRange();
-}, { deep: true });
+}
 
 onMounted(() => {
     console.log("mounted", range.value.min, range.value.max);
@@ -79,18 +78,6 @@ function calculateGradient(baseColor, activeColor) {
 /** Code for slider from
  *  https://codepen.io/predragdavidovic/pen/mdpMoWo
  */
-.range_container {
-    display: flex;
-    flex-direction: column;
-    width: 80%;
-    margin: 100px auto;
-}
-
-.sliders_control {
-    position: relative;
-    min-height: 50px;
-}
-
 
 input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -101,6 +88,10 @@ input[type=range]::-webkit-slider-thumb {
     border-radius: 50%;
     box-shadow: 0 0 0 1px #C6C6C6;
     cursor: pointer;
+}
+
+input[type=range]:first-child::-webkit-slider-thumb {
+    transform: translateX(-5px);
 }
 
 input[type=range]::-moz-range-thumb {
@@ -122,7 +113,6 @@ input[type=range]::-webkit-slider-thumb:active {
     box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
     -webkit-box-shadow: inset 0 0 3px #387bbe, 0 0 9px #387bbe;
 }
-
 
 
 input[type="range"] {
