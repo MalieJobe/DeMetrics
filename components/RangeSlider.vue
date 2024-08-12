@@ -80,6 +80,7 @@ function calculateGradient(baseColor, activeColor) {
  */
 
 input[type=range]::-webkit-slider-thumb {
+    appearance: none;
     -webkit-appearance: none;
     pointer-events: all;
     width: 24px;
@@ -95,6 +96,7 @@ input[type=range]:first-child::-webkit-slider-thumb {
 }
 
 input[type=range]::-moz-range-thumb {
+    appearance: none;
     -webkit-appearance: none;
     pointer-events: all;
     width: 24px;
