@@ -1,5 +1,5 @@
 <template>
-    <div class="range_container flex flex-col w-full my-2 mx-auto">
+    <div class="range_container flex flex-col w-full mx-auto my-4 p-4 bg-blue-50">
         <div class="sliders_control relative min-h-5 mt-5">
             <input class="fromSlider" type="range" v-model.number="range.min" :min="props.from" :max="props.to"
                 :step="stepSize" @input="updateSliderPosition" />

@@ -60,7 +60,6 @@ const onRangeChange = (range) => {
     </div>
 
     <RangeSlider name="age" :from="0" :to="100" :minStart="20" :maxStart="90" @change="onRangeChange" />
-    <p>Range: {{ selectedRange.min }} - {{ selectedRange.max }}</p>
 
     <RangeSlider name="height" :from="150" :to="273" :minStart="165" :maxStart="185" @change="onRangeChange" />
     <RangeSlider name="weight" :from="1" :to="4" :minStart="1" :maxStart="4" @change="onRangeChange" />
