@@ -63,35 +63,33 @@ export default class DBConnector {
         return result;
     }
 
-    async getAgePercentage(minAge = 14, maxAge = 100, gender = 'total') {
-        if (!['total', 'female', 'male'].includes(gender)) throw new Error("Invalid specified gender");
+    async getAgePercentage(minAge = 14, maxAge = 100, gender = 'all') {
+        if (!['all', 'female', 'male'].includes(gender)) throw new Error("Invalid specified gender");
         if (minAge < 0 || maxAge > 100) throw new Error("Invalid age range");
+        if (minAge > maxAge) throw new Error("minAge must be less than or equal to maxAge");
 
-        const genderColumn = gender + '_percent';
-        const sql = `SELECT SUM(${genderColumn}) FROM age WHERE age_start >= ? AND age_end <= ?`;
+        const sql = `SELECT SUM(${gender}) FROM age WHERE age_min >= ? AND age_max <= ?`;
 
         return await this.getSingleRow(sql, [minAge, maxAge]);
     }
 
     async getGenderPercentage(gender) {
-        if (gender !== 'female' || gender !== 'male') throw new Error("Invalid gender specified");
+        if (!['female', 'male'].includes(gender)) throw new Error("Invalid gender specified");
         const sql = `SELECT percentage FROM gender WHERE gender = ?`;
         return await this.getSingleRow(sql, [gender]);
     }
 
-    async getHeightPercentage(minHeight = 0, maxHeight = 300, gender = 'total') {
-        if (!['total', 'female', 'male'].includes(gender)) throw new Error("Invalid specified gender");
+    async getHeightPercentage(minHeight = 0, maxHeight = 300, gender = 'all') {
+        if (!['all', 'female', 'male'].includes(gender)) throw new Error("Invalid specified gender");
         if (minHeight < 0 || maxHeight > 300) throw new Error("Invalid height range");
         if (minHeight > maxHeight) throw new Error("minHeight must be less than or equal to maxHeight");
         if (minHeight > 190 || maxHeight < 149) throw new Error("Height range not supported");
 
-        const genderColumn = gender + '_percent'; // todo rename column so i dont have to append percent every time
-
         let sql;
-        if (gender === 'total') {
-            sql = `SELECT SUM(female_percent + male_percent) / 2 FROM height WHERE height_low >= ? AND height_high <= ?`;
+        if (gender === 'all') {
+            sql = `SELECT SUM(female + male) / 2 FROM height WHERE height_min >= ? AND height_max <= ?`;
         } else {
-            sql = `SELECT SUM(${genderColumn}) FROM height WHERE height_low >= ? AND height_high <= ?`;
+            sql = `SELECT SUM(${gender}) FROM height WHERE height_min >= ? AND height_max <= ?`;
         }
         return await this.getSingleRow(sql, [minHeight, maxHeight]);
     }
@@ -99,12 +97,12 @@ export default class DBConnector {
     async getIncomePercentage(minIncome, maxIncome) {
         if (minIncome > maxIncome) throw new Error("minIncome must be less than or equal to maxIncome");
 
-        const sql = `SELECT SUM(population_percentage) FROM income WHERE income_low >= ? AND income_high <= ?`;
+        const sql = `SELECT SUM(percent) FROM income WHERE income_min >= ? AND income_max <= ?`;
         return await this.getSingleRow(sql, [minIncome, maxIncome]);
     }
 
-    async getWeightPercentage(minWeight, maxWeight, minAge = 18, maxAge = 100, gender = 'total') {
-        if (!['total', 'Female', 'Male'].includes(gender)) throw new Error("Invalid gender specified");
+    async getWeightPercentage(minWeight, maxWeight, minAge = 18, maxAge = 100, gender = 'all') {
+        if (!['all', 'female', 'male'].includes(gender)) throw new Error("Invalid gender specified");
 
         const possibleWeightCategories = ['underweight', 'normal', 'overweight', 'obese'];
         if (!possibleWeightCategories.includes(minWeight)) throw new Error("Invalid minWeight specified");
@@ -112,31 +110,25 @@ export default class DBConnector {
         const minWeightIndex = possibleWeightCategories.indexOf(minWeight);
         const maxWeightIndex = possibleWeightCategories.indexOf(maxWeight);
         if (minWeightIndex > maxWeightIndex) {
-            throw new Error("minWeight must be less than or equal to maxWeight");
+            throw new Error("minWeight must passed in before maxWeight");
         }
 
         const selectedWeights = possibleWeightCategories.slice(minWeightIndex, maxWeightIndex + 1);
 
-        // for people below 18 years old there is no data
-        // todo fill in
-        // https://www.bundesgesundheitsministerium.de/themen/praevention/kindergesundheit/praevention-von-kinder-uebergewicht#:~:text=Ergebnisse%20der%20zweiten%20Welle%20der,5%2C9%20Prozent%20adip%C3%B6s%20sind.
-        // https://www.rki.de/DE/Content/Gesundheitsmonitoring/Gesundheitsberichterstattung/GBEDownloadsJ/Journal-of-Health-Monitoring_01_2018_KiGGS-Welle2_erste_Ergebnisse.pdf?__blob=publicationFile
-
         let sql;
-        if (gender === 'total') {
-            // todo ausgiebig testen
-            sql = `SELECT SUM(${selectedWeights.join(' + ')}) / ${selectedWeights.length} FROM weight WHERE age_lower >= ? AND age_upper <= ?`;
+        if (gender === 'all') {
+            sql = `SELECT SUM(${selectedWeights.join(' + ')}) / 2 FROM weight WHERE age_max >= ? AND age_min <= ?`;
+            return await this.getSingleRow(sql, [minAge, maxAge]);
         } else {
-            sql = `SELECT SUM(${selectedWeights.join(' + ')}) / ${selectedWeights.length} FROM weight WHERE age_lower >= ? AND age_upper <= ? AND gender = ?`;
+            sql = `SELECT SUM(${selectedWeights.join(' + ')}) FROM weight WHERE age_max >= ? AND age_min <= ? AND gender = ?`;
+            return await this.getSingleRow(sql, [minAge, maxAge, gender]);
         }
-        return await this.getSingleRow(sql, [minAge, maxAge, gender]);
     }
 
-    async getSinglesPercentage(minAge, maxAge) {
-        // todo get data when no age is given
+    async getSinglesPercentage(minAge = 14, maxAge = 100) {
         if (minAge > maxAge) throw new Error("minAge must be less than or equal to maxAge");
 
-        const sql = `SELECT SUM(singles_in_age_group) FROM singles WHERE age_lower >= ? AND age_upper <= ?`;
+        const sql = `SELECT SUM(percent) / COUNT(percent) FROM relationship_status WHERE age_max >= ? AND age_min <= ?`;
         return await this.getSingleRow(sql, [minAge, maxAge]);
     }
 
@@ -155,3 +147,32 @@ export default class DBConnector {
         return await this.getSingleRow(sql, []);
     }
 }
+
+// todo: always return 1 at most
+// todo: only return the actual value, not the object
+
+
+//initialize db connection and get weight data and log it
+// const dbPath = './server/data/demographics.sqlite';
+// const dbc = await DBConnector.getInstance(dbPath);
+
+// const ageData = await dbc.getAgePercentage(0, 100, "male")
+// console.log(ageData);
+
+// const genderData = await dbc.getGenderPercentage('male');
+// console.log(genderData);
+
+// const heightData = await dbc.getHeightPercentage(149, 190, 'all');
+// console.log(heightData);
+
+// const incomeData = await dbc.getIncomePercentage(0, 10000);
+// console.log(incomeData);
+
+// const getSinglesData = await dbc.getSinglesPercentage(18, 100);
+// console.log(getSinglesData);
+
+// const weightData = await dbc.getWeightPercentage('underweight', 'obese', 20, 23, 'male');
+// console.log(weightData);
+
+// const weightDatas = await dbc.getWeightPercentage('underweight', 'normal', 20, 23, 'all');
+// console.log(weightDatas);
