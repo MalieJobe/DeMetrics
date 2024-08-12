@@ -1,6 +1,8 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 
+import fs from 'fs';
+
 
 export default class DBConnector {
     /**
@@ -27,6 +29,13 @@ export default class DBConnector {
         if (!dbFilePath) {
             throw new Error('Database file path must be provided to initialize DBConnector.');
         }
+
+        if (!fs.existsSync(dbFilePath)) {
+            console.error('Database file does not exist:', dbFilePath);
+        } else {
+            console.log('Database file found:', dbFilePath);
+        }
+
         const db = await open({
             filename: dbFilePath,
             driver: sqlite3.Database,
@@ -140,13 +149,3 @@ export default class DBConnector {
         return res;
     }
 }
-
-
-
-const dbc = await DBConnector.getInstance('/C:/Users/malie/dev/DeMetrics/server/data/demographics.sqlite');
-
-const ageData = await dbc.getAgePercentage(20, 23, 'female');
-console.log(ageData);
-
-const heightData = await dbc.getHeightPercentage(190, 300, 'female');
-console.log(heightData);
