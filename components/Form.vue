@@ -9,6 +9,29 @@ import RangeSlider from './RangeSlider.vue';
 //         gender: 'female'
 //     }
 // });
+const totalPercentage = ref(1);
+
+const formData = reactive({
+    age: {
+        min: null,
+        max: null
+    },
+    height: {
+        min: null,
+        max: null
+    },
+    weight: {
+        min: null,
+        max: null
+    },
+    income: {
+        min: null,
+        max: null
+    },
+    isSingle: true,
+    gender: 'all', // options: all, male, female
+})
+
 
 const selectedRange = ref({ min: 0, max: 100 });
 
