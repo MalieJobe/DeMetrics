@@ -7,7 +7,7 @@ provide('totalPercentage', totalPercentage);
 
 <template>
   <div
-    class="antialiased bg-white dark:bg-black text-black dark:text-white min-h-screen place-content-center flex flex-col items-center justify-center text-sm sm:text-base">
+    class="antialiased bg-white dark:bg-black text-black dark:text-white min-h-screen place-content-center flex flex-col items-center justify-center text-sm sm:text-base md:px-0 px-2">
     <div class="flex-1 flex flex-col gap-y-16 py-14">
       <header>
         <h1

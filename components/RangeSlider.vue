@@ -6,6 +6,19 @@
             <input class="toSlider" type="range" v-model.number="range.max" :min="props.from" :max="props.to"
                 :step="stepSize" :style="{ background: rangeGradient }" @input="updateSliderPosition" />
         </div>
+        <div class="flex justify-between mt-2 items-center">
+            <div class="flex-1">
+                <span class="minmax">{{ formatNumber(props.from) }}</span>
+            </div>
+            <div class="flex-1 text-center">
+                <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded">
+                    {{ formatNumber(range.min) }} - {{ formatNumber(range.max) }}
+                </span>
+            </div>
+            <div class="flex-1 text-right">
+                <span class="minmax minmax--left">{{ formatNumber(props.to) }}</span>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -72,9 +85,35 @@ function calculateGradient(baseColor, activeColor) {
       ${baseColor} 100%)`;
 }
 
+// todo move this to a helper file
+function formatNumber(number) {
+    return Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(number);
+}
 </script>
 
-<style>
+<style lang="postcss">
+.minmax {
+    @apply bg-gray-200 py-1 px-2 rounded text-sm relative;
+}
+
+.minmax::before {
+    content: "";
+    border-width: 10px;
+    top: 10px;
+    left: 0;
+    transform: translateY(-100%);
+    position: absolute;
+    border-color: transparent transparent transparent #e5e7eb;
+    /* Triangle color */
+}
+
+.minmax--left::before {
+    right: 0;
+    left: auto;
+    border-color: transparent #e5e7eb transparent transparent;
+}
+
+
 /** Code for slider from
  *  https://codepen.io/predragdavidovic/pen/mdpMoWo
  */
