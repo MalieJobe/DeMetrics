@@ -1,10 +1,10 @@
 <template>
     <div class="range_container">
         <div class="sliders_control">
-            <input ref="fromSlider" class="fromSlider" type="range" v-model="range.min" :min="props.from"
-                :max="props.to" :step="stepSize" />
-            <input ref="toSlider" class="toSlider" type="range" v-model="range.max" :min="props.from" :max="props.to"
-                :step="stepSize" :style="{ background: rangeGradient }" />
+            <input class="fromSlider" type="range" v-model="range.min" :min="props.from" :max="props.to"
+                :step="stepSize" />
+            <input class="toSlider" type="range" v-model="range.max" :min="props.from" :max="props.to" :step="stepSize"
+                :style="{ background: rangeGradient }" />
         </div>
     </div>
 </template>
@@ -13,29 +13,35 @@
 const emit = defineEmits(['change']);
 
 const props = defineProps({
-    from: Number,
-    to: Number,
-    minStart: Number,
-    maxStart: Number,
+    name: { type: String, required: true },
+    from: { type: Number, required: true },
+    to: { type: Number, required: true },
+    minStart: { type: Number, required: true },
+    maxStart: { type: Number, required: true },
     stepSize: { type: Number, default: 1 },
 });
 
+// todo: range is initially number. but when slider is moved it becomes string.
+// works fine for division in calculateGradient but not for comparison in watch.
 const range = ref({ min: props.minStart, max: props.maxStart });
 const rangeGradient = ref('');
+const rangeActiveColor = "#e364b3";
 
 watch(range, () => {
+    console.log("changed", range.value.min, range.value.max);
     if (range.value.min > range.value.max) {
         range.value.max = range.value.min;
     }
     if (range.value.max < range.value.min) {
         range.value.min = range.value.max;
     }
-    rangeGradient.value = calculateGradient('#C6C6C6', '#25daa5');
+    rangeGradient.value = calculateGradient('#C6C6C6', rangeActiveColor);
     emitRange();
 }, { deep: true });
 
 onMounted(() => {
-    rangeGradient.value = calculateGradient('#C6C6C6', '#25daa5');
+    console.log("mounted", range.value.min, range.value.max);
+    rangeGradient.value = calculateGradient('#C6C6C6', rangeActiveColor);
 });
 
 function debounce(func, timeout = 500) {
@@ -70,6 +76,9 @@ function calculateGradient(baseColor, activeColor) {
 </script>
 
 <style>
+/** Code for slider from
+ *  https://codepen.io/predragdavidovic/pen/mdpMoWo
+ */
 .range_container {
     display: flex;
     flex-direction: column;

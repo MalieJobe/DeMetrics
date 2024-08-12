@@ -13,13 +13,13 @@ import RangeSlider from './RangeSlider.vue';
 const selectedRange = ref({ min: 0, max: 100 });
 
 const onRangeChange = (range) => {
-    console.log(range);
+    console.log("parent", range);
     selectedRange.value = range;
 };
 
 </script>
 <template>
-    <RangeSlider :from="0" :to="100" :minStart="20" :maxStart="90" :stepSize="10" @change="onRangeChange" />
+    <RangeSlider name="age" :from="0" :to="100" :minStart="20" :maxStart="90" :stepSize="10" @change="onRangeChange" />
     <p>Range: {{ selectedRange.min }} - {{ selectedRange.max }}</p>
 
 
