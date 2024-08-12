@@ -9,27 +9,39 @@ import RangeSlider from './RangeSlider.vue';
 //         gender: 'female'
 //     }
 // });
-const totalPercentage = ref(1);
+
+const totalPercentage = inject('totalPercentage');
 
 const formData = reactive({
     age: {
         min: null,
-        max: null
+        max: null,
+        percetange: 1,
     },
     height: {
         min: null,
-        max: null
+        max: null,
+        percetange: 1,
     },
     weight: {
         min: null,
-        max: null
+        max: null,
+        percetange: 1,
     },
     income: {
         min: null,
-        max: null
+        max: null,
+        percetange: 1,
+        stepSize: 5000
     },
-    isSingle: true,
-    gender: 'all', // options: all, male, female
+    relationshipStatus: {
+        isSingle: true,
+        percetange: 1,
+    },
+    preferredGender: {
+        gender: 'all', // options: all, male, female
+        percetange: 1,
+    },
 })
 
 
@@ -42,7 +54,7 @@ const onRangeChange = (range) => {
 
 </script>
 <template>
-    <RangeSlider name="age" :from="0" :to="100" :minStart="20" :maxStart="90" :stepSize="10" @change="onRangeChange" />
+    <RangeSlider name="age" :from="0" :to="100" :minStart="20" :maxStart="90" @change="onRangeChange" />
     <p>Range: {{ selectedRange.min }} - {{ selectedRange.max }}</p>
 
 

@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import Form from './components/Form.vue';
+
+const totalPercentage = ref(1);
+provide('totalPercentage', totalPercentage);
 </script>
 
 <template>
