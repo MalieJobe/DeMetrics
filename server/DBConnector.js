@@ -156,14 +156,14 @@ export default class DBConnector {
 
 
 //initialize db connection and get weight data and log it
-const dbPath = './server/data/demographics.sqlite';
-const dbc = await DBConnector.getInstance(dbPath);
+// const dbPath = './server/data/demographics.sqlite';
+// const dbc = await DBConnector.getInstance(dbPath);
 
 // const ageData = await dbc.getAgePercentage(0, 100, "male")
 // console.log(ageData);
 
-const ageDatas = await dbc.getAgePercentage(10, 80, "total")
-console.log(ageDatas);
+// const ageDatas = await dbc.getAgePercentage(10, 80, "total")
+// console.log(ageDatas);
 
 // const genderData = await dbc.getGenderPercentage('male');
 // console.log(genderData);

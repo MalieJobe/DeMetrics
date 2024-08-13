@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event);
 
     // Validate query parameters
-    const { minWeight, maxWeight, minAge, maxAge, gender } = query;
+    let { minWeight, maxWeight, minAge, maxAge, gender } = query;
     const allowedWeights = ['underweight', 'normal', 'overweight', 'obese'];
     if (!minAge) minAge = 18;
     if (!maxAge) maxAge = 100;
