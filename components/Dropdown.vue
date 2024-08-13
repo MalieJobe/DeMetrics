@@ -13,10 +13,6 @@ const props = defineProps({
     options: { type: Array, required: true },
 });
 
-function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
 const selection = ref(props.options[0]);
 const emit = defineEmits(['change']);
 function emitChange() {
