@@ -60,7 +60,13 @@ export default class DBConnector {
                 console.log("No data found");
             }
         });
-        return result;
+        if (result) {
+            // Extract the first property value from the result object
+            const key = Object.keys(result)[0];
+            return Math.min(result[key], 1); // return 1 at most, something cant be more than 100%
+        } else {
+            return null;
+        }
     }
 
     async getAgePercentage(minAge = 14, maxAge = 100, gender = 'all') {
@@ -147,9 +153,6 @@ export default class DBConnector {
         return await this.getSingleRow(sql, []);
     }
 }
-
-// todo: always return 1 at most
-// todo: only return the actual value, not the object
 
 
 //initialize db connection and get weight data and log it
