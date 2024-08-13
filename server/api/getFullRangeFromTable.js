@@ -9,11 +9,15 @@ export default defineEventHandler(async (event) => {
         return { error: 'Missing required parameters: tableName, columnMin, columnMax' };
     }
 
+    if (tableName === "weight") {
+        return ["underweight", "normal", "overweight", "obese"];
+    }
+
     const dbFilePath = './server/data/demographics.sqlite';
     const dbc = await DBConnector.getInstance(dbFilePath);
 
     try {
-        const data = await dbc.getFullRangeFromTable(minHeight, maxHeight, gender);
+        const data = await dbc.getFullRangeFromTable(tableName, columnMin, columnMax);
         return { data };
     } catch (error) {
         return { error: error.message };
