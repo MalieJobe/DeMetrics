@@ -45,26 +45,28 @@ const formData = reactive({
 })
 
 
-const selectedRange = ref({ min: 0, max: 100 });
+const onPreferencesChange = (name, range) => {
+    console.log(name + " changed to " + range.min + " - " + range.max);
+};
 
-const onRangeChange = (range) => {
-    console.log("parent", range);
-    selectedRange.value = range;
+const onDropdownChange = (name, value) => {
+    console.log(name + " changed to " + value);
 };
 
 </script>
 <template>
     <div class="flex flex-row gap-x-10">
-        <Dropdown name="gender" :options="['all', 'male', 'female']" />
-        <Dropdown name="isSingle" :options="['true', 'false']" />
+        <Dropdown name="gender" :options="['all', 'male', 'female']" @change="onDropdownChange" />
+        <Dropdown name="isSingle" :options="['true', 'false']" @change="onDropdownChange" />
     </div>
 
-    <RangeSlider name="age" :from="0" :to="100" :minStart="20" :maxStart="90" unit="year" @change="onRangeChange" />
+    <RangeSlider name="age" :from="0" :to="100" :minStart="20" :maxStart="90" unit="year"
+        @change="onPreferencesChange" />
 
     <RangeSlider name="height" :from="150" :to="273" :minStart="165" :maxStart="185" unit="length"
-        @change="onRangeChange" />
-    <RangeSlider name="weight" :from="1" :to="4" :minStart="1" :maxStart="4" @change="onRangeChange" />
+        @change="onPreferencesChange" />
+    <RangeSlider name="weight" :from="1" :to="4" :minStart="1" :maxStart="4" @change="onPreferencesChange" />
     <RangeSlider name="income" :from="-0" :to="1000000" :minStart="15000" :maxStart="120000" :stepSize="5000"
-        unit="currency" @change="onRangeChange" />
+        unit="currency" @change="onPreferencesChange" />
 
 </template>

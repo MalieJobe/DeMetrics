@@ -18,8 +18,8 @@ function capitalize(str) {
 }
 
 const selection = ref(props.options[0]);
-const emit = defineEmits(['selectChange']);
+const emit = defineEmits(['change']);
 function emitChange() {
-    emit('selectChange', selection.value);
+    emit('change', props.name, selection.value);
 }
 </script>

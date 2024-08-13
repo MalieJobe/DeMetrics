@@ -68,7 +68,7 @@ function debounce(func, timeout = 500) {
 }
 
 const emitRange = debounce(() => {
-    emit('change', range.value);
+    emit('change', props.name, range.value);
 });
 
 function calculateGradient(baseColor, activeColor) {
