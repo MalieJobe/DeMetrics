@@ -186,23 +186,23 @@ export default class DBConnector {
 }
 
 
-const dbPath = './server/data/demographics.sqlite';
-const dbc = await DBConnector.getInstance(dbPath);
+// const dbPath = './server/data/demographics.sqlite';
+// const dbc = await DBConnector.getInstance(dbPath);
 
-const ageRange = await dbc.getFullRangeFromTable('age', 'age_min', 'age_max');
-console.log(ageRange);
+// const ageRange = await dbc.getFullRangeFromTable('age', 'age_min', 'age_max');
+// console.log(ageRange);
 
-const heightRange = await dbc.getFullRangeFromTable('height', 'height_min', 'height_max');
-console.log(heightRange);
+// const heightRange = await dbc.getFullRangeFromTable('height', 'height_min', 'height_max');
+// console.log(heightRange);
 
-const incomeRange = await dbc.getFullRangeFromTable('income', 'income_min', 'income_max');
-console.log(incomeRange);
+// const incomeRange = await dbc.getFullRangeFromTable('income', 'income_min', 'income_max');
+// console.log(incomeRange);
 
-const weightRange = await dbc.getFullRangeFromTable('weight', 'age_min', 'age_max');
-console.log(weightRange);
+// const weightRange = await dbc.getFullRangeFromTable('weight', 'age_min', 'age_max');
+// console.log(weightRange);
 
-const relationshipRange = await dbc.getFullRangeFromTable('relationship_status', 'age_min', 'age_max');
-console.log(relationshipRange);
+// const relationshipRange = await dbc.getFullRangeFromTable('relationship_status', 'age_min', 'age_max');
+// console.log(relationshipRange);
 
 
 // const ageMinMax = await dbc.getMinMaxFromTable('age', 'age_min', 'age_max');
