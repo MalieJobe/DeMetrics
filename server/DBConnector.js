@@ -60,6 +60,12 @@ export default class DBConnector {
                 console.log("No data found");
             }
         });
+        return result;
+    }
+
+    async getSingleValues(sql, params) {
+        const result = await this.getSingleRow(sql, params);
+
         if (result) {
             // Extract the first property value from the result object
             const key = Object.keys(result)[0];
@@ -69,6 +75,7 @@ export default class DBConnector {
         }
     }
 
+
     async getAgePercentage(minAge = 14, maxAge = 100, gender = 'total') {
         if (!['total', 'female', 'male'].includes(gender)) throw new Error("Invalid specified gender");
         if (minAge < 0 || maxAge > 100) throw new Error("Invalid age range");
@@ -76,13 +83,13 @@ export default class DBConnector {
 
         const sql = `SELECT SUM(${gender}) FROM age WHERE age_min >= ? AND age_max <= ?`;
 
-        return await this.getSingleRow(sql, [minAge, maxAge]);
+        return await this.getSingleValues(sql, [minAge, maxAge]);
     }
 
     async getGenderPercentage(gender) {
         if (!['female', 'male'].includes(gender)) throw new Error("Invalid gender specified");
         const sql = `SELECT percentage FROM gender WHERE gender = ?`;
-        return await this.getSingleRow(sql, [gender]);
+        return await this.getSingleValues(sql, [gender]);
     }
 
     async getHeightPercentage(minHeight = 0, maxHeight = 300, gender = 'total') {
@@ -97,14 +104,14 @@ export default class DBConnector {
         } else {
             sql = `SELECT SUM(${gender}) FROM height WHERE height_min >= ? AND height_max <= ?`;
         }
-        return await this.getSingleRow(sql, [minHeight, maxHeight]);
+        return await this.getSingleValues(sql, [minHeight, maxHeight]);
     }
 
     async getIncomePercentage(minIncome, maxIncome) {
         if (minIncome > maxIncome) throw new Error("minIncome must be less than or equal to maxIncome");
 
         const sql = `SELECT SUM(percent) FROM income WHERE income_min >= ? AND income_max <= ?`;
-        return await this.getSingleRow(sql, [minIncome, maxIncome]);
+        return await this.getSingleValues(sql, [minIncome, maxIncome]);
     }
 
     async getWeightPercentage(minWeight, maxWeight, minAge = 18, maxAge = 100, gender = 'total') {
@@ -124,10 +131,10 @@ export default class DBConnector {
         let sql;
         if (gender === 'total') {
             sql = `SELECT SUM(${selectedWeights.join(' + ')}) / 2 FROM weight WHERE age_max >= ? AND age_min <= ?`;
-            return await this.getSingleRow(sql, [minAge, maxAge]);
+            return await this.getSingleValues(sql, [minAge, maxAge]);
         } else {
             sql = `SELECT SUM(${selectedWeights.join(' + ')}) FROM weight WHERE age_max >= ? AND age_min <= ? AND gender = ?`;
-            return await this.getSingleRow(sql, [minAge, maxAge, gender]);
+            return await this.getSingleValues(sql, [minAge, maxAge, gender]);
         }
     }
 
@@ -135,7 +142,7 @@ export default class DBConnector {
         if (minAge > maxAge) throw new Error("minAge must be less than or equal to maxAge");
 
         const sql = `SELECT SUM(percent) / COUNT(percent) FROM relationship_status WHERE age_max >= ? AND age_min <= ?`;
-        return await this.getSingleRow(sql, [minAge, maxAge]);
+        return await this.getSingleValues(sql, [minAge, maxAge]);
     }
 
     async getTestData() {
@@ -148,16 +155,40 @@ export default class DBConnector {
         return res;
     }
 
-    async getMinMaxFromTable(tableName, columnName) {
-        const sql = `SELECT MIN(${columnName}) as min, MAX(${columnName}) as max FROM ${tableName}`;
+    async getMinMaxFromTable(tableName, columnMin, columnMax) {
+        const sql = `SELECT MIN(${columnMin}) as min, MAX(${columnMax || columnMin}) as max FROM ${tableName}`;
         return await this.getSingleRow(sql, []);
     }
 }
 
 
 //initialize db connection and get weight data and log it
-// const dbPath = './server/data/demographics.sqlite';
-// const dbc = await DBConnector.getInstance(dbPath);
+const dbPath = './server/data/demographics.sqlite';
+const dbc = await DBConnector.getInstance(dbPath);
+
+const ageMinMax = await dbc.getMinMaxFromTable('age', 'age_min', 'age_max');
+console.log(ageMinMax);
+
+const heightMinMax = await dbc.getMinMaxFromTable('height', 'height_min', 'height_max');
+console.log(heightMinMax);
+
+const incomeMinMax = await dbc.getMinMaxFromTable('income', 'income_min', 'income_max');
+console.log("income", incomeMinMax);
+
+const weightMinMax = await dbc.getMinMaxFromTable('weight', 'age_min', 'age_max');
+console.log(weightMinMax);
+
+const relationshipMinMax = await dbc.getMinMaxFromTable('relationship_status', 'age_min', 'age_max');
+console.log(relationshipMinMax);
+
+// const incomeMinMax = await dbc.getMinMaxFromTable('income', 'income_min', 'income_max');
+// console.log(incomeMinMax);
+
+// const weightMinMax = await dbc.getMinMaxFromTable('weight', 'age_min', 'age_max');
+// console.log(weightMinMax);
+
+// const relationshipMinMax = await dbc.getMinMaxFromTable('relationship_status', 'age_min', 'age_max');
+// console.log(relationshipMinMax);
 
 // const ageData = await dbc.getAgePercentage(0, 100, "male")
 // console.log(ageData);
