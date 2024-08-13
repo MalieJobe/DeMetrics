@@ -69,8 +69,8 @@ export default class DBConnector {
         }
     }
 
-    async getAgePercentage(minAge = 14, maxAge = 100, gender = 'all') {
-        if (!['all', 'female', 'male'].includes(gender)) throw new Error("Invalid specified gender");
+    async getAgePercentage(minAge = 14, maxAge = 100, gender = 'total') {
+        if (!['total', 'female', 'male'].includes(gender)) throw new Error("Invalid specified gender");
         if (minAge < 0 || maxAge > 100) throw new Error("Invalid age range");
         if (minAge > maxAge) throw new Error("minAge must be less than or equal to maxAge");
 
@@ -85,14 +85,14 @@ export default class DBConnector {
         return await this.getSingleRow(sql, [gender]);
     }
 
-    async getHeightPercentage(minHeight = 0, maxHeight = 300, gender = 'all') {
-        if (!['all', 'female', 'male'].includes(gender)) throw new Error("Invalid specified gender");
+    async getHeightPercentage(minHeight = 0, maxHeight = 300, gender = 'total') {
+        if (!['total', 'female', 'male'].includes(gender)) throw new Error("Invalid specified gender");
         if (minHeight < 0 || maxHeight > 300) throw new Error("Invalid height range");
         if (minHeight > maxHeight) throw new Error("minHeight must be less than or equal to maxHeight");
         if (minHeight > 190 || maxHeight < 149) throw new Error("Height range not supported");
 
         let sql;
-        if (gender === 'all') {
+        if (gender === 'total') {
             sql = `SELECT SUM(female + male) / 2 FROM height WHERE height_min >= ? AND height_max <= ?`;
         } else {
             sql = `SELECT SUM(${gender}) FROM height WHERE height_min >= ? AND height_max <= ?`;
@@ -107,8 +107,8 @@ export default class DBConnector {
         return await this.getSingleRow(sql, [minIncome, maxIncome]);
     }
 
-    async getWeightPercentage(minWeight, maxWeight, minAge = 18, maxAge = 100, gender = 'all') {
-        if (!['all', 'female', 'male'].includes(gender)) throw new Error("Invalid gender specified");
+    async getWeightPercentage(minWeight, maxWeight, minAge = 18, maxAge = 100, gender = 'total') {
+        if (!['total', 'female', 'male'].includes(gender)) throw new Error("Invalid gender specified");
 
         const possibleWeightCategories = ['underweight', 'normal', 'overweight', 'obese'];
         if (!possibleWeightCategories.includes(minWeight)) throw new Error("Invalid minWeight specified");
@@ -122,7 +122,7 @@ export default class DBConnector {
         const selectedWeights = possibleWeightCategories.slice(minWeightIndex, maxWeightIndex + 1);
 
         let sql;
-        if (gender === 'all') {
+        if (gender === 'total') {
             sql = `SELECT SUM(${selectedWeights.join(' + ')}) / 2 FROM weight WHERE age_max >= ? AND age_min <= ?`;
             return await this.getSingleRow(sql, [minAge, maxAge]);
         } else {
@@ -156,16 +156,19 @@ export default class DBConnector {
 
 
 //initialize db connection and get weight data and log it
-// const dbPath = './server/data/demographics.sqlite';
-// const dbc = await DBConnector.getInstance(dbPath);
+const dbPath = './server/data/demographics.sqlite';
+const dbc = await DBConnector.getInstance(dbPath);
 
 // const ageData = await dbc.getAgePercentage(0, 100, "male")
 // console.log(ageData);
 
+const ageDatas = await dbc.getAgePercentage(10, 80, "total")
+console.log(ageDatas);
+
 // const genderData = await dbc.getGenderPercentage('male');
 // console.log(genderData);
 
-// const heightData = await dbc.getHeightPercentage(149, 190, 'all');
+// const heightData = await dbc.getHeightPercentage(149, 190, 'total');
 // console.log(heightData);
 
 // const incomeData = await dbc.getIncomePercentage(0, 10000);
@@ -177,5 +180,5 @@ export default class DBConnector {
 // const weightData = await dbc.getWeightPercentage('underweight', 'obese', 20, 23, 'male');
 // console.log(weightData);
 
-// const weightDatas = await dbc.getWeightPercentage('underweight', 'normal', 20, 23, 'all');
+// const weightDatas = await dbc.getWeightPercentage('underweight', 'normal', 20, 23, 'total');
 // console.log(weightDatas);
