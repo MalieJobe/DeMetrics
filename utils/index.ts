@@ -1,6 +1,6 @@
 const locale = 'en-US';
 
-function formatNumber(value: number, unit: string) {
+export function formatNumber(value: number, unit: string) {
     let formatter;
 
     switch (unit) {
@@ -28,13 +28,13 @@ function formatNumber(value: number, unit: string) {
             });
             break;
         default:
-            throw new Error('Invalid unit type. Valid units are length, currency, and year.');
+            return value;
     }
 
     return formatter.format(value);
 }
 
-// Example Usage:
-console.log(formatNumber(1500, 'length')); // "1,500 kilometers"
-console.log(formatNumber(1000, 'currency')); // "€1,000.00"
-console.log(formatNumber(2024, 'year')); // "2,024"
+// // Example Usage:
+// console.log(formatNumber(1500, 'length')); // "1,500 kilometers"
+// console.log(formatNumber(1000, 'currency')); // "€1,000.00"
+// console.log(formatNumber(2024, 'year')); // "2,024"
