@@ -11,15 +11,15 @@
         </div>
         <div class="flex justify-between mt-2 items-center">
             <div class="flex-1">
-                <span class="minmax">{{ formatNumber(props.from, props.unit) }}</span>
+                <span class="minmax whitespace-nowrap">{{ formatNumber(props.from, props.unit) }}</span>
             </div>
             <div class="flex-1 text-center">
-                <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded">
+                <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded whitespace-nowrap">
                     {{ formatNumber(range.min, props.unit) }} - {{ formatNumber(range.max, props.unit) }}
                 </span>
             </div>
             <div class="flex-1 text-right">
-                <span class="minmax minmax--left">{{ formatNumber(props.to, props.unit) }}</span>
+                <span class="minmax minmax--left whitespace-nowrap">{{ formatNumber(props.to, props.unit) }}</span>
             </div>
         </div>
     </section>
