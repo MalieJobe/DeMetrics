@@ -1,3 +1,8 @@
+export function capitalize(value: string) {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+
 const locale = 'en-US';
 
 export function formatNumber(value: number, unit: string) {
