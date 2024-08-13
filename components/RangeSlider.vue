@@ -8,15 +8,15 @@
         </div>
         <div class="flex justify-between mt-2 items-center">
             <div class="flex-1">
-                <span class="minmax">{{ formatNumber(props.from) }}</span>
+                <span class="minmax">{{ formatNumber(props.from, unit) }}</span>
             </div>
             <div class="flex-1 text-center">
                 <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded">
-                    {{ formatNumber(range.min) }} - {{ formatNumber(range.max) }}
+                    {{ formatNumber(range.min, unit) }} - {{ formatNumber(range.max, unit) }}
                 </span>
             </div>
             <div class="flex-1 text-right">
-                <span class="minmax minmax--left">{{ formatNumber(props.to) }}</span>
+                <span class="minmax minmax--left">{{ formatNumber(props.to, unit) }}</span>
             </div>
         </div>
     </div>
@@ -32,6 +32,7 @@ const props = defineProps({
     minStart: { type: Number, required: true },
     maxStart: { type: Number, required: true },
     stepSize: { type: Number, default: 1 },
+    unit: { type: String }
 });
 
 const range = ref({ min: props.minStart, max: props.maxStart });
@@ -83,11 +84,6 @@ function calculateGradient(baseColor, activeColor) {
       ${activeColor} ${(toPosition) / (rangeDistance) * 100}%, 
       ${baseColor} ${(toPosition) / (rangeDistance) * 100}%, 
       ${baseColor} 100%)`;
-}
-
-// todo move this to a helper file
-function formatNumber(number) {
-    return Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(number);
 }
 </script>
 

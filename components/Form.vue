@@ -39,7 +39,7 @@ const formData = reactive({
         percetange: 1,
     },
     preferredGender: {
-        gender: 'all', // options: all, male, female
+        gender: 'total', // options: total, male, female
         percetange: 1,
     },
 })
@@ -59,11 +59,12 @@ const onRangeChange = (range) => {
         <Dropdown name="isSingle" :options="['true', 'false']" />
     </div>
 
-    <RangeSlider name="age" :from="0" :to="100" :minStart="20" :maxStart="90" @change="onRangeChange" />
+    <RangeSlider name="age" :from="0" :to="100" :minStart="20" :maxStart="90" unit="year" @change="onRangeChange" />
 
-    <RangeSlider name="height" :from="150" :to="273" :minStart="165" :maxStart="185" @change="onRangeChange" />
+    <RangeSlider name="height" :from="150" :to="273" :minStart="165" :maxStart="185" unit="length"
+        @change="onRangeChange" />
     <RangeSlider name="weight" :from="1" :to="4" :minStart="1" :maxStart="4" @change="onRangeChange" />
     <RangeSlider name="income" :from="-0" :to="1000000" :minStart="15000" :maxStart="120000" :stepSize="5000"
-        @change="onRangeChange" />
+        unit="currency" @change="onRangeChange" />
 
 </template>
