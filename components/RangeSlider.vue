@@ -1,5 +1,9 @@
 <template>
-    <div class="range_container flex flex-col w-full mx-auto my-4 p-4 bg-blue-50">
+    <section class="range_container flex flex-col w-full mx-auto my-4 p-4 bg-blue-50">
+        <aside class="flex justify-between items-center">
+            <h3 class="text-xl font-bold">{{ capitalize(props.name) }}</h3>
+            <span class="text-sm text-gray-500">{{ props.unit }}</span>
+        </aside>
         <div class="sliders_control relative min-h-5 mt-5">
             <input class="fromSlider" type="range" v-model.number="range.min" :min="props.from" :max="props.to"
                 :step="stepSize" @input="updateSliderPosition" />
@@ -19,7 +23,7 @@
                 <span class="minmax minmax--left">{{ formatNumber(props.to, props.unit) }}</span>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script setup>

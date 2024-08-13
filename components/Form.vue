@@ -1,49 +1,61 @@
 <script setup>
 import RangeSlider from './RangeSlider.vue';
-
-// const { data, status, error } = await useFetch('/api/db_connector', {
-//     params: {
-//         type: 'age',
-//         minAge: 20,
-//         maxAge: 23,
-//         gender: 'female'
-//     }
-// });
-
-const totalPercentage = inject('totalPercentage');
+const updateTotalPercentage = inject('updateTotalPercentage');
 
 const formData = reactive({
     age: {
+        range: [],
         min: null,
         max: null,
         percetange: 1,
     },
     height: {
+        range: [],
         min: null,
         max: null,
         percetange: 1,
     },
     weight: {
+        range: ["underweight", "normal", "overweight", "obese"],
         min: null,
         max: null,
         percetange: 1,
     },
     income: {
+        range: [],
         min: null,
         max: null,
         percetange: 1,
         stepSize: 5000
     },
     relationshipStatus: {
+        range: [true, false],
         isSingle: true,
         percetange: 1,
     },
     preferredGender: {
-        gender: 'total', // options: total, male, female
+        range: ['total', 'male', 'female'],
+        gender: 'total',
         percetange: 1,
     },
 })
 
+const fetchSingleRange = async (tableName, columnMin, columnMax) => {
+    const { data, status, error } = await useFetch('/api/getFullRangeFromTable', {
+        params: {
+            tableName,
+            columnMin,
+            columnMax,
+        }
+    });
+    return data;
+}
+
+formData.age.range = await fetchSingleRange('age', 'age_min', 'age_max');
+formData.height.range = await fetchSingleRange('height', 'height_min', 'height_max');
+formData.income.range = await fetchSingleRange('income', 'income_min', 'income_max');
+
+console.log(formData)
 
 const onPreferencesChange = (name, range) => {
     console.log(name + " changed to " + range.min + " - " + range.max);
@@ -65,7 +77,9 @@ const onDropdownChange = (name, value) => {
 
     <RangeSlider name="height" :from="150" :to="273" :minStart="165" :maxStart="185" unit="length"
         @change="onPreferencesChange" />
+
     <RangeSlider name="weight" :from="1" :to="4" :minStart="1" :maxStart="4" @change="onPreferencesChange" />
+
     <RangeSlider name="income" :from="-0" :to="1000000" :minStart="15000" :maxStart="120000" :stepSize="5000"
         unit="currency" @change="onPreferencesChange" />
 

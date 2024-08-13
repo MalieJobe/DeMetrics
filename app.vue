@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import Form from './components/Form.vue';
+import Mainform from './components/Form.vue';
 
 const totalPercentage = ref(1);
-provide('totalPercentage', totalPercentage);
+provide('updateTotalPercentage', (value: number) => {
+  totalPercentage.value = value;
+});
+
 </script>
 
 <template>
@@ -14,12 +17,11 @@ provide('totalPercentage', totalPercentage);
           class=" text-5xl font-bold text-center bg-gradient-to-br from-primary to-accent text-transparent bg-clip-text">
           DeMetrics
         </h1>
-        <!-- short subtitle about how this tool has info on demographics and will show you what percentage of the population you can date with the set preferences -->
         <h2 class="text-2xl font-semibold text-center">What percentage of the population match your dating preferences?
         </h2>
       </header>
       <main>
-        <Form />
+        <Mainform />
       </main>
       <footer>Created with ❤️ by <a href="https://github.com/MalieJobe/">Malie</a></footer>
     </div>
@@ -34,11 +36,6 @@ provide('totalPercentage', totalPercentage);
   border-width: 0;
   border-style: solid;
   border-color: var(--un-default-border-color, #e5e7eb)
-}
-
-:before,
-:after {
-  --un-content: ""
 }
 
 html {
