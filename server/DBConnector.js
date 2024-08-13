@@ -63,6 +63,18 @@ export default class DBConnector {
         return result;
     }
 
+    async getMultipleRows(sql, params) {
+        const result = await this.db.all(sql, params, (err, rows) => {
+            if (err) {
+                throw new Error(err.message);
+            }
+            if (!rows || rows.length === 0) {
+                console.log("No data found");
+            }
+        });
+        return result;
+    }
+
     async getSingleValues(sql, params) {
         const result = await this.getSingleRow(sql, params);
 
@@ -159,27 +171,54 @@ export default class DBConnector {
         const sql = `SELECT MIN(${columnMin}) as min, MAX(${columnMax || columnMin}) as max FROM ${tableName}`;
         return await this.getSingleRow(sql, []);
     }
+
+    async getFullRangeFromTable(tableName, columnMin, columnMax) {
+        const sql = `SELECT ${columnMin}, ${columnMax} FROM ${tableName}`;
+        let rows = await this.getMultipleRows(sql, []);
+
+        // Combine all age_min and age_max values into one array
+        rows = rows.flatMap(item => [item[columnMin], item[columnMax]]);
+        rows = [...new Set(rows)]; // Remove duplicates
+
+        // Sort the array in ascending order
+        return rows.sort((a, b) => a - b);
+    }
 }
 
 
-//initialize db connection and get weight data and log it
 const dbPath = './server/data/demographics.sqlite';
 const dbc = await DBConnector.getInstance(dbPath);
 
-const ageMinMax = await dbc.getMinMaxFromTable('age', 'age_min', 'age_max');
-console.log(ageMinMax);
+const ageRange = await dbc.getFullRangeFromTable('age', 'age_min', 'age_max');
+console.log(ageRange);
 
-const heightMinMax = await dbc.getMinMaxFromTable('height', 'height_min', 'height_max');
-console.log(heightMinMax);
+const heightRange = await dbc.getFullRangeFromTable('height', 'height_min', 'height_max');
+console.log(heightRange);
 
-const incomeMinMax = await dbc.getMinMaxFromTable('income', 'income_min', 'income_max');
-console.log("income", incomeMinMax);
+const incomeRange = await dbc.getFullRangeFromTable('income', 'income_min', 'income_max');
+console.log(incomeRange);
 
-const weightMinMax = await dbc.getMinMaxFromTable('weight', 'age_min', 'age_max');
-console.log(weightMinMax);
+const weightRange = await dbc.getFullRangeFromTable('weight', 'age_min', 'age_max');
+console.log(weightRange);
 
-const relationshipMinMax = await dbc.getMinMaxFromTable('relationship_status', 'age_min', 'age_max');
-console.log(relationshipMinMax);
+const relationshipRange = await dbc.getFullRangeFromTable('relationship_status', 'age_min', 'age_max');
+console.log(relationshipRange);
+
+
+// const ageMinMax = await dbc.getMinMaxFromTable('age', 'age_min', 'age_max');
+// console.log(ageMinMax);
+
+// const heightMinMax = await dbc.getMinMaxFromTable('height', 'height_min', 'height_max');
+// console.log(heightMinMax);
+
+// const incomeMinMax = await dbc.getMinMaxFromTable('income', 'income_min', 'income_max');
+// console.log("income", incomeMinMax);
+
+// const weightMinMax = await dbc.getMinMaxFromTable('weight', 'age_min', 'age_max');
+// console.log(weightMinMax);
+
+// const relationshipMinMax = await dbc.getMinMaxFromTable('relationship_status', 'age_min', 'age_max');
+// console.log(relationshipMinMax);
 
 // const incomeMinMax = await dbc.getMinMaxFromTable('income', 'income_min', 'income_max');
 // console.log(incomeMinMax);
@@ -189,6 +228,9 @@ console.log(relationshipMinMax);
 
 // const relationshipMinMax = await dbc.getMinMaxFromTable('relationship_status', 'age_min', 'age_max');
 // console.log(relationshipMinMax);
+
+
+
 
 // const ageData = await dbc.getAgePercentage(0, 100, "male")
 // console.log(ageData);
