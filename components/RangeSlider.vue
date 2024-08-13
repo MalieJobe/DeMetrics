@@ -8,15 +8,15 @@
         </div>
         <div class="flex justify-between mt-2 items-center">
             <div class="flex-1">
-                <span class="minmax">{{ formatNumber(props.from, unit) }}</span>
+                <span class="minmax">{{ formatNumber(props.from, props.unit) }}</span>
             </div>
             <div class="flex-1 text-center">
                 <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded">
-                    {{ formatNumber(range.min, unit) }} - {{ formatNumber(range.max, unit) }}
+                    {{ formatNumber(range.min, props.unit) }} - {{ formatNumber(range.max, props.unit) }}
                 </span>
             </div>
             <div class="flex-1 text-right">
-                <span class="minmax minmax--left">{{ formatNumber(props.to, unit) }}</span>
+                <span class="minmax minmax--left">{{ formatNumber(props.to, props.unit) }}</span>
             </div>
         </div>
     </div>
@@ -71,11 +71,10 @@ const emitRange = debounce(() => {
     emit('change', range.value);
 });
 
-
 function calculateGradient(baseColor, activeColor) {
     const rangeDistance = props.to - props.from;
-    const fromPosition = range.value.min;
-    const toPosition = range.value.max;
+    const fromPosition = range.value.min - props.from;
+    const toPosition = range.value.max - props.from;
     return `linear-gradient(
       to right,
       ${baseColor} 0%,
