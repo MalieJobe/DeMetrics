@@ -4,22 +4,23 @@
             <h3 class="text-xl font-bold">{{ capitalize(props.name) }}</h3>
         </aside>
         <div class="sliders_control relative min-h-5 mt-5">
-            <input class="fromSlider" type="range" v-model.number="range.min" :min="props.from" :max="props.to"
+            <input class="fromSlider" type="range" v-model.number="computedRange.min" :min="rangeFrom" :max="rangeTo"
                 :step="stepSize" @input="updateSliderPosition" />
-            <input class="toSlider" type="range" v-model.number="range.max" :min="props.from" :max="props.to"
+            <input class="toSlider" type="range" v-model.number="computedRange.max" :min="rangeFrom" :max="rangeTo"
                 :step="stepSize" :style="{ background: rangeGradient }" @input="updateSliderPosition" />
         </div>
         <div class="flex justify-between mt-2 items-center">
             <div class="flex-1">
-                <span class="minmax whitespace-nowrap">{{ formatNumber(props.from, props.unit) }}</span>
+                <span class="minmax whitespace-nowrap">{{ formatNumber(rangeFrom, props.unit) }}</span>
             </div>
             <div class="flex-1 text-center">
                 <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded whitespace-nowrap">
-                    {{ formatNumber(range.min, props.unit) }} - {{ formatNumber(range.max, props.unit) }}
+                    {{ formatNumber(computedRange.min, props.unit) }} - {{ formatNumber(computedRange.max, props.unit)
+                    }}
                 </span>
             </div>
             <div class="flex-1 text-right">
-                <span class="minmax minmax--left whitespace-nowrap">{{ formatNumber(props.to, props.unit) }}</span>
+                <span class="minmax minmax--left whitespace-nowrap">{{ formatNumber(rangeTo, props.unit) }}</span>
             </div>
         </div>
     </section>
@@ -30,25 +31,28 @@ const emit = defineEmits(['change']);
 
 const props = defineProps({
     name: { type: String, required: true },
-    from: { type: Number, required: true },
-    to: { type: Number, required: true },
+    fullRange: { type: Array, required: true },
     minStart: { type: Number, required: true },
     maxStart: { type: Number, required: true },
     stepSize: { type: Number, default: 1 },
     unit: { type: String }
 });
 
-const range = ref({ min: props.minStart, max: props.maxStart });
+
+const rangeFrom = Math.min(...props.fullRange);
+const rangeTo = Math.max(...props.fullRange);
+
+const computedRange = ref({ min: props.minStart, max: props.maxStart });
 const rangeGradient = ref('');
 const rangeActiveColor = "#e364b3";
 
 function updateSliderPosition(event) {
-    if (range.value.min > range.value.max) {
+    if (computedRange.value.min > computedRange.value.max) {
         const activeSlider = event.target.classList.contains('fromSlider') ? 'from' : 'to';
         if (activeSlider === 'from') {
-            range.value.max = range.value.min;
+            computedRange.value.max = computedRange.value.min;
         } else {
-            range.value.min = range.value.max;
+            computedRange.value.min = computedRange.value.max;
         }
     }
     rangeGradient.value = calculateGradient('#C6C6C6', rangeActiveColor);
@@ -56,7 +60,7 @@ function updateSliderPosition(event) {
 }
 
 onMounted(() => {
-    console.log("mounted", range.value.min, range.value.max);
+    console.log("mounted", computedRange.value.min, computedRange.value.max);
     rangeGradient.value = calculateGradient('#C6C6C6', rangeActiveColor);
 });
 
@@ -71,13 +75,13 @@ function debounce(func, timeout = 500) {
 }
 
 const emitRange = debounce(() => {
-    emit('change', props.name, range.value);
+    emit('change', props.name, computedRange.value);
 });
 
 function calculateGradient(baseColor, activeColor) {
-    const rangeDistance = props.to - props.from;
-    const fromPosition = range.value.min - props.from;
-    const toPosition = range.value.max - props.from;
+    const rangeDistance = rangeTo - rangeFrom;
+    const fromPosition = computedRange.value.min - rangeFrom;
+    const toPosition = computedRange.value.max - rangeFrom;
     return `linear-gradient(
       to right,
       ${baseColor} 0%,
