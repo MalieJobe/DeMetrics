@@ -1,5 +1,6 @@
 <template>
-    <section class="range_container flex flex-col w-full mx-auto my-4 p-4 bg-blue-50">
+    <section
+        class="range_container flex flex-col w-full mx-auto my-4 p-4 bg-primary bg-opacity-5 shadow-md rounded border-gray-200 border-solid border">
         <aside class="flex justify-between items-center">
             <h3 class="text-xl font-bold">{{ capitalize(props.name) }}</h3>
         </aside>
@@ -13,20 +14,22 @@
             <div class="flex-1">
                 <span class="minmax whitespace-nowrap">
                     {{ props.fullRange[0] === -Infinity ? '< ' +
-                        formatNumber(props.fullRange[1]) : formatNumber(props.fullRange[0]) }}
+                        formatNumber(props.fullRange[1], props.unit) : formatNumber(props.fullRange[0], props.unit) }}
                 </span>
             </div>
             <div class="flex-1 text-center">
                 <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded whitespace-nowrap">
-                    {{ formatNumber(props.fullRange[computedRange.min], props.unit) }} - {{ formatNumber(props.fullRange[computedRange.max], props.unit)
-                    }}
-                </span>
+                    {{ props.fullRange[computedRange.min] === -Infinity ?
+                        `<${formatNumber(props.fullRange[1], props.unit)}` : formatNumber(props.fullRange[computedRange.min],
+                            props.unit) }} - {{ props.fullRange[computedRange.max] === Infinity ?
+                                formatNumber(props.fullRange[rangeLength0Based - 1], props.unit) + ' +' :
+                                formatNumber(props.fullRange[computedRange.max], props.unit) }} </span>
             </div>
             <div class="flex-1 text-right">
                 <span class="minmax minmax--left whitespace-nowrap">
                     {{ props.fullRange[rangeLength0Based] === Infinity ?
-                        formatNumber(props.fullRange[rangeLength0Based - 1]) + ' +' :
-                        formatNumber(props.fullRange[rangeLength0Based]) }} </span>
+                        formatNumber(props.fullRange[rangeLength0Based - 1], props.unit) + '+' :
+                        formatNumber(props.fullRange[rangeLength0Based], props.unit) }} </span>
             </div>
         </div>
     </section>
