@@ -181,7 +181,14 @@ export default class DBConnector {
         rows = [...new Set(rows)]; // Remove duplicates
 
         // Sort the array in ascending order
-        return rows.sort((a, b) => a - b);
+        rows = rows.sort((a, b) => a - b);
+
+        // Filter for income, only keep multiples of 5000
+        if (tableName === "income") {
+            rows = rows.filter(value => value % 5000 === 0 || !isFinite(value));
+        }
+
+        return rows;
     }
 }
 

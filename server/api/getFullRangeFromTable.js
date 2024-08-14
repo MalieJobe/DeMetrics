@@ -18,11 +18,7 @@ export default defineEventHandler(async (event) => {
 
     try {
         let data = await dbc.getFullRangeFromTable(tableName, columnMin, columnMax);
-
-        // Convert Infinity values to string, because Infinity is not a valid JSON
-        data = data.map(value => (value === Infinity ? 'Infinity' : value === -Infinity ? '-Infinity' : value));
-
-        return data; // here infinity still exists
+        return data;
     } catch (error) {
         return { error: error.message };
     }

@@ -4,23 +4,29 @@
             <h3 class="text-xl font-bold">{{ capitalize(props.name) }}</h3>
         </aside>
         <div class="sliders_control relative min-h-5 mt-5">
-            <input class="fromSlider" type="range" v-model.number="computedRange.min" :min="rangeFrom" :max="rangeTo"
+            <input class="fromSlider" type="range" v-model.number="computedRange.min" min="0" :max="rangeLength0Based"
                 :step="stepSize" @input="updateSliderPosition" />
-            <input class="toSlider" type="range" v-model.number="computedRange.max" :min="rangeFrom" :max="rangeTo"
+            <input class="toSlider" type="range" v-model.number="computedRange.max" min="0" :max="rangeLength0Based"
                 :step="stepSize" :style="{ background: rangeGradient }" @input="updateSliderPosition" />
         </div>
         <div class="flex justify-between mt-2 items-center">
             <div class="flex-1">
-                <span class="minmax whitespace-nowrap">{{ formatNumber(rangeFrom, props.unit) }}</span>
+                <span class="minmax whitespace-nowrap">
+                    {{ props.fullRange[0] === -Infinity ? '< ' +
+                        formatNumber(props.fullRange[1]) : formatNumber(props.fullRange[0]) }}
+                </span>
             </div>
             <div class="flex-1 text-center">
                 <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded whitespace-nowrap">
-                    {{ formatNumber(computedRange.min, props.unit) }} - {{ formatNumber(computedRange.max, props.unit)
+                    {{ formatNumber(props.fullRange[computedRange.min], props.unit) }} - {{ formatNumber(props.fullRange[computedRange.max], props.unit)
                     }}
                 </span>
             </div>
             <div class="flex-1 text-right">
-                <span class="minmax minmax--left whitespace-nowrap">{{ formatNumber(rangeTo, props.unit) }}</span>
+                <span class="minmax minmax--left whitespace-nowrap">
+                    {{ props.fullRange[rangeLength0Based] === Infinity ?
+                        formatNumber(props.fullRange[rangeLength0Based - 1]) + ' +' :
+                        formatNumber(props.fullRange[rangeLength0Based]) }} </span>
             </div>
         </div>
     </section>
@@ -32,17 +38,19 @@ const emit = defineEmits(['change']);
 const props = defineProps({
     name: { type: String, required: true },
     fullRange: { type: Array, required: true },
-    minStart: { type: Number, required: true },
-    maxStart: { type: Number, required: true },
+    minStart: { type: Number, default: 0 },
+    maxStart: { type: Number },
     stepSize: { type: Number, default: 1 },
     unit: { type: String }
 });
+
+const rangeLength0Based = props.fullRange.length - 1;
 
 
 const rangeFrom = Math.min(...props.fullRange);
 const rangeTo = Math.max(...props.fullRange);
 
-const computedRange = ref({ min: props.minStart, max: props.maxStart });
+const computedRange = ref({ min: props.minStart, max: props.maxStart || rangeLength0Based });
 const rangeGradient = ref('');
 const rangeActiveColor = "#e364b3";
 
@@ -79,9 +87,9 @@ const emitRange = debounce(() => {
 });
 
 function calculateGradient(baseColor, activeColor) {
-    const rangeDistance = rangeTo - rangeFrom;
-    const fromPosition = computedRange.value.min - rangeFrom;
-    const toPosition = computedRange.value.max - rangeFrom;
+    const rangeDistance = rangeLength0Based;
+    const fromPosition = computedRange.value.min;
+    const toPosition = computedRange.value.max;
     return `linear-gradient(
       to right,
       ${baseColor} 0%,

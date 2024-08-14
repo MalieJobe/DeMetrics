@@ -16,7 +16,7 @@ const formData = reactive({
         percetange: 1,
     },
     weight: {
-        range: ["underweight", "normal", "overweight", "obese"],
+        range: [],
         min: null,
         max: null,
         percetange: 1,
@@ -40,26 +40,14 @@ const formData = reactive({
     },
 })
 
-const fetchSingleRange = async (tableName, columnMin, columnMax) => {
-    const { data, status, error } = await useFetch('/api/getFullRangeFromTable', {
-        params: {
-            tableName,
-            columnMin,
-            columnMax,
-        }
-    });
-    status.value && console.log("Status: ", status.value);
-    error.value && console.error("Error: ", error.value);
 
-    // Convert string representation back to Infinity
-    const processedData = data.value.map(value => (value === 'Infinity' ? Infinity : value === '-Infinity' ? -Infinity : value));
+const { data } = await useAsyncData('ranges', () => queryContent('ranges').only(['age', 'height', 'weight', 'income']).findOne())
 
-    return processedData; // infinity values are lost here
+for (const key in data.value) {
+    formData[key].range = data.value[key].map(item =>
+        item === 'Infinity' ? Infinity : item === '-Infinity' ? -Infinity : item
+    );
 }
-
-formData.age.range = await fetchSingleRange('age', 'age_min', 'age_max');
-formData.height.range = await fetchSingleRange('height', 'height_min', 'height_max');
-formData.income.range = await fetchSingleRange('income', 'income_min', 'income_max');
 
 const onPreferencesChange = (name, range) => {
     console.log(name + " changed to " + range.min + " - " + range.max);
@@ -72,20 +60,17 @@ const onDropdownChange = (name, value) => {
 </script>
 <template>
     <div class="flex flex-row gap-x-10">
-        <Dropdown name="gender" :options="['all', 'male', 'female']" @change="onDropdownChange" />
-        <Dropdown name="isSingle" :options="['true', 'false']" @change="onDropdownChange" />
+        <Dropdown name="gender" :options="formData.preferredGender.range" @change="onDropdownChange" />
+        <Dropdown name="isSingle" :options="formData.relationshipStatus.range" @change="onDropdownChange" />
     </div>
 
-    <RangeSlider name="age" :fullRange="formData.age.range" :minStart="20" :maxStart="90" unit="year"
+    <RangeSlider name="age" :fullRange="formData.age.range" :minStart="20" :maxStart="35" unit="year"
         @change="onPreferencesChange" />
 
-    <RangeSlider name="height" :fullRange="formData.height.range" :minStart="165" :maxStart="185" unit="length"
-        @change="onPreferencesChange" />
+    <RangeSlider name="height" :fullRange="formData.height.range" unit="length" @change="onPreferencesChange" />
 
-    <RangeSlider name="weight" :fullRange="formData.weight.range" :minStart="1" :maxStart="4"
-        @change="onPreferencesChange" />
+    <RangeSlider name="weight" :fullRange="formData.weight.range" @change="onPreferencesChange" />
 
-    <RangeSlider name="income" :fullRange="formData.income.range" :minStart="15000" :maxStart="120000" :stepSize="5000"
-        unit="currency" @change="onPreferencesChange" />
+    <RangeSlider name="income" :fullRange="formData.income.range" unit="currency" @change="onPreferencesChange" />
 
 </template>
