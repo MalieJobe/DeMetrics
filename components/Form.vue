@@ -1,115 +1,118 @@
+<template>
+    <div class="flex flex-row gap-x-10">
+
+        <!-- the first item in the options will be the default. dangerous as it can get out of sync with the ref thats set here up top -->
+        <Dropdown title="Preferred Gender" :options="[['total', 'All Genders'], ['female', 'Woman'], ['male', 'Men']]"
+            @change="onGenderChange" />
+        <Dropdown title="Only Singles?" :options="[[true, 'Yes'], [false, 'No, include Singles']]"
+            @change="onSingleChange" />
+    </div>
+
+    <RangeSlider title="Age" :fullRange="ageRange" :minStart="20" :maxStart="35" unit="year" @change="onAgeChange" />
+    <RangeSlider title="Height" :fullRange="heightRange" unit="length" @change="onHeightChange" />
+    <RangeSlider title="Weight" :fullRange="weightRange" @change="onWeightChange" />
+    <RangeSlider title="Income" :fullRange="incomeRange" unit="currency" @change="onIncomeChange" />
+
+</template>
+
 <script setup>
 import RangeSlider from './RangeSlider.vue';
 const updateTotalPercentage = inject('updateTotalPercentage');
 
-const formData = reactive({
-    age: {
-        range: [],
-        min: null,
-        max: null,
-        percetange: 1,
-    },
-    height: {
-        range: [],
-        min: null,
-        max: null,
-        percetange: 1,
-    },
-    weight: {
-        range: [],
-        min: null,
-        max: null,
-        percetange: 1,
-    },
-    income: {
-        range: [],
-        min: null,
-        max: null,
-        percetange: 1,
-        stepSize: 5000
-    },
-    relationshipStatus: {
-        range: [true, false],
-        status: true,
-        percetange: 1,
-    },
-    gender: {
-        range: ['total', 'male', 'female'],
-        status: 'total',
-        percetange: 1,
-    },
-})
+const ageRange = ref([]);
+const heightRange = ref([]);
+const weightRange = ref([]);
+const incomeRange = ref([]);
+
+const minAge = ref(undefined);
+const maxAge = ref(undefined);
+const maxHeight = ref(undefined);
+const minHeight = ref(undefined);
+const minWeight = ref(undefined);
+const maxWeight = ref(undefined);
+const minIncome = ref(undefined);
+const maxIncome = ref(undefined);
+
+const isSingle = ref(true);
+const gender = ref('total');
 
 
 const { data } = await useAsyncData('ranges', () => queryContent('ranges').only(['age', 'height', 'weight', 'income']).findOne())
 
+let processedData = {};
 for (const key in data.value) {
-    formData[key].range = data.value[key].map(item =>
+    processedData[key] = data.value[key].map(item =>
         item === 'Infinity' ? Infinity : item === '-Infinity' ? -Infinity : item
     );
 }
 
-const apiEndpointMap = {
-    age: 'age',
-    height: 'height',
-    weight: 'weight',
-    income: 'income',
-    relationshipStatus: 'singles',
-    preferredGender: 'gender'
+ageRange.value = processedData.age;
+heightRange.value = processedData.height;
+weightRange.value = processedData.weight;
+incomeRange.value = processedData.income;
+
+watch([minAge, maxAge, minHeight, maxHeight, minWeight, maxWeight, minIncome, maxIncome, gender, isSingle], () => {
+    callPercentageApi();
+});
+
+
+async function callPercentageApi() {
+    const { data, status, error } = await $fetch("/api/percentage", {
+        params: {
+            minAge: minAge.value,
+            maxAge: maxAge.value,
+            minHeight: minHeight.value,
+            maxHeight: maxHeight.value,
+            minWeight: minWeight.value,
+            maxWeight: maxWeight.value,
+            minIncome: minIncome.value,
+            maxIncome: maxIncome.value,
+            gender: gender.value,
+            isSingle: isSingle.value,
+        },
+    });
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+    if (data) {
+        updateTotalPercentage(data);
+    }
 }
 
 
-async function onPreferencesChange(name, range) {
-    console.log(name + " changed to " + range.min + " - " + range.max);
-    if (!Object.keys(formData).includes(name)) throw new Error('Invalid range changed');
+async function onAgeChange(range) {
+    console.log("Age changed to " + range.min + " - " + range.max);
+    minAge.value = range.min;
+    maxAge.value = range.max;
+}
 
-    formData[name].min = range.min;
-    formData[name].max = range.max;
+async function onHeightChange(range) {
+    console.log("Height changed to " + range.min + " - " + range.max);
+    minHeight.value = range.min;
+    maxHeight.value = range.max;
+}
 
-    formData[name].percetange = await getPercentageFromDb(apiEndpointMap[name], {
-        minAge: range.min,
-        maxAge: range.max,
-        gender: formData.gender.status
-    });
-    console.log(name + " percetange is " + formData[name].percetange);
-};
+async function onWeightChange(range) {
+    console.log("Weight changed to " + range.min + " - " + range.max);
+    minWeight.value = range.min;
+    maxWeight.value = range.max;
+}
 
-const onDropdownChange = (name, value) => {
-    console.log(name + " changed to " + value);
-    if (!Object.keys(formData).includes(name)) throw new Error('Invalid dropdown changed');
+async function onIncomeChange(range) {
+    console.log("Income changed to " + range.min + " - " + range.max);
+    minIncome.value = range.min;
+    maxIncome.value = range.max;
+}
 
-    formData[name].status = value;
-};
+async function onGenderChange(value) {
+    console.log('gender changed' + value);
+    gender.value = value;
+}
 
-watch(
-    () => [formData.age.percetange, formData.height.percetange, formData.weight.percetange, formData.income.percetange, formData.relationshipStatus.percetange, formData.gender.percetange],
-    ([newAge, newHeight, newWeight, newIncome, newRelationshipStatus, newPreferredGender]) => {
-        console.log('factors are: ', newAge, newHeight, newWeight, newIncome, newRelationshipStatus, newPreferredGender);
-        updateTotalPercentage(newAge * newHeight * newWeight * newIncome * newRelationshipStatus * newPreferredGender);
-    }
-);
-
-async function getPercentageFromDb(endpoint, params) {
-    const { data, status, error } = await $fetch("/api/" + endpoint, {
-        params,
-    });
-    if (error) throw new Error('Error fetching data from the server');
-    return data;
+async function onSingleChange(value) {
+    console.log('single changed' + value);
+    isSingle.value = value;
 }
 </script>
-<template>
-    <div class="flex flex-row gap-x-10">
-        <Dropdown name="gender" :options="formData.gender.range" @change="onDropdownChange" />
-        <Dropdown name="isSingle" :options="formData.relationshipStatus.range" @change="onDropdownChange" />
-    </div>
-
-    <RangeSlider name="age" :fullRange="formData.age.range" :minStart="20" :maxStart="35" unit="year"
-        @change="onPreferencesChange" />
-
-    <RangeSlider name="height" :fullRange="formData.height.range" unit="length" @change="onPreferencesChange" />
-
-    <RangeSlider name="weight" :fullRange="formData.weight.range" @change="onPreferencesChange" />
-
-    <RangeSlider name="income" :fullRange="formData.income.range" unit="currency" @change="onPreferencesChange" />
-
-</template>

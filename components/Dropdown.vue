@@ -1,21 +1,22 @@
 <template>
     <div class="flex flex-row gap-x-2 items-center">
-        <label :for="name" class="font-semibold text-lg">{{ capitalize(name) }}</label>
-        <select :name="name" :id="name" v-model="selection" @change="emitChange" class="border border-gray-300 rounded">
-            <option v-for="opt in options" :value="opt">{{ capitalize(opt) }}</option>
+        <label :for="title" class="font-semibold text-lg">{{ props.title }}</label>
+        <select :name="title" :id="title" v-model="selection" @change="emitChange"
+            class="border border-gray-300 rounded">
+            <option v-for="opt in options" :value="opt[0]">{{ opt[1] || opt[0] }}</option>
         </select>
     </div>
 </template>
 
 <script setup>
 const props = defineProps({
-    name: { type: String, required: true },
+    title: { type: String, required: true },
     options: { type: Array, required: true },
 });
 
-const selection = ref(props.options[0]);
+const selection = ref(props.options[0][0]);
 const emit = defineEmits(['change']);
 function emitChange() {
-    emit('change', props.name, selection.value);
+    emit('change', selection.value);
 }
 </script>

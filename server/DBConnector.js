@@ -108,7 +108,6 @@ export default class DBConnector {
 
     async getHeightPercentage(minHeight = 0, maxHeight = 300, gender = 'total') {
         if (!['total', 'female', 'male'].includes(gender)) throw new Error("Invalid specified gender");
-        if (minHeight < 0 || maxHeight > 300) throw new Error("Invalid height range");
         if (minHeight > maxHeight) throw new Error("minHeight must be less than or equal to maxHeight");
         if (minHeight > 190 || maxHeight < 149) throw new Error("Height range not supported");
 

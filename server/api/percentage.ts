@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
         validParameterKeys.forEach(key => {
             // Check if the query parameter is defined
-            if (queryParameters[key] !== undefined) {
+            if (queryParameters[key] !== undefined || queryParameters[key] !== null) {
                 if (key === 'gender') validParameters[key] = queryParameters[key] as 'total' | 'male' | 'female';
                 else validParameters[key] = queryParameters[key] as number
             }

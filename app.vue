@@ -21,7 +21,9 @@ provide('updateTotalPercentage', (value: number) => {
         </h2>
       </header>
       <main>
-        <h2 class="text-xl font-bold text-center">{{ totalPercentage * 100 }} %</h2>
+        <h2 class=" text-5xl font-bold text-center p-6 mb-12 border-solid border-black border">{{ totalPercentage * 100
+          }} %
+        </h2>
         <Mainform />
       </main>
       <footer>Created with ❤️ by <a href="https://github.com/MalieJobe/">Malie</a></footer>

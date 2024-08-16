@@ -2,7 +2,7 @@
     <section
         class="range_container flex flex-col w-full mx-auto my-4 p-4 bg-primary bg-opacity-5 shadow-md rounded border-gray-200 border-solid border">
         <aside class="flex justify-between items-center">
-            <h3 class="text-xl font-bold">{{ capitalize(props.name) }}</h3>
+            <h3 class="text-xl font-bold">{{ props.title }}</h3>
         </aside>
         <div class="sliders_control relative min-h-5 mt-5">
             <input class="fromSlider" type="range" v-model.number="computedRange.min" min="0" :max="rangeLength0Based"
@@ -39,7 +39,7 @@
 const emit = defineEmits(['change']);
 
 const props = defineProps({
-    name: { type: String, required: true },
+    title: { type: String },
     fullRange: { type: Array, required: true },
     minStart: { type: Number, default: 0 },
     maxStart: { type: Number },
@@ -86,7 +86,7 @@ function debounce(func, timeout = 500) {
 }
 
 const emitRange = debounce(() => {
-    emit('change', props.name, {
+    emit('change', {
         min: props.fullRange[computedRange.value.min],
         max: props.fullRange[computedRange.value.max]
     });
