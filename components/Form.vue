@@ -8,6 +8,7 @@
             @change="onSingleChange" />
     </div>
 
+    <!-- todo: age limit mindestens 14 einführen, da keine Daten in der Datenbank und es ist fragwürdig  -->
     <RangeSlider title="Age" :fullRange="ageRange" :minStart="20" :maxStart="35" unit="year" @change="onAgeChange" />
     <RangeSlider title="Height" :fullRange="heightRange" unit="length" @change="onHeightChange" />
     <RangeSlider title="Weight" :fullRange="weightRange" @change="onWeightChange" />

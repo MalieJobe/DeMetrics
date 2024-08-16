@@ -49,10 +49,6 @@ const props = defineProps({
 
 const rangeLength0Based = props.fullRange.length - 1;
 
-
-const rangeFrom = Math.min(...props.fullRange);
-const rangeTo = Math.max(...props.fullRange);
-
 const computedRange = ref({ min: props.minStart, max: props.maxStart || rangeLength0Based });
 const rangeGradient = ref('');
 const rangeActiveColor = "#e364b3";

@@ -152,6 +152,7 @@ export default class DBConnector {
     }
 
     async getSinglesPercentage(minAge = 14, maxAge = 100) {
+        console.log(minAge, maxAge);
         if (minAge > maxAge) throw new Error("minAge must be less than or equal to maxAge");
 
         const sql = `SELECT SUM(percent) / COUNT(percent) FROM relationship_status WHERE age_max >= ? AND age_min <= ?`;
