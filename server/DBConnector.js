@@ -83,7 +83,7 @@ export default class DBConnector {
             const key = Object.keys(result)[0];
             return Math.min(result[key], 1); // return 1 at most, something cant be more than 100%
         } else {
-            return null;
+            return 1;
         }
     }
 
@@ -98,8 +98,10 @@ export default class DBConnector {
         return await this.getSingleValues(sql, [minAge, maxAge]);
     }
 
-    async getGenderPercentage(gender) {
-        if (!['female', 'male'].includes(gender)) throw new Error("Invalid gender specified");
+    async getGenderPercentage(gender = 'total') {
+        if (!['female', 'male', 'total'].includes(gender)) throw new Error("Invalid gender specified");
+        if (gender === 'total') return 1; // duh
+
         const sql = `SELECT percentage FROM gender WHERE gender = ?`;
         return await this.getSingleValues(sql, [gender]);
     }
@@ -119,14 +121,14 @@ export default class DBConnector {
         return await this.getSingleValues(sql, [minHeight, maxHeight]);
     }
 
-    async getIncomePercentage(minIncome, maxIncome) {
+    async getIncomePercentage(minIncome = -Infinity, maxIncome = Infinity) {
         if (minIncome > maxIncome) throw new Error("minIncome must be less than or equal to maxIncome");
 
         const sql = `SELECT SUM(percent) FROM income WHERE income_min >= ? AND income_max <= ?`;
         return await this.getSingleValues(sql, [minIncome, maxIncome]);
     }
 
-    async getWeightPercentage(minWeight, maxWeight, minAge = 18, maxAge = 100, gender = 'total') {
+    async getWeightPercentage(minWeight = 'underweight', maxWeight = 'obese', minAge = 18, maxAge = 100, gender = 'total') {
         if (!['total', 'female', 'male'].includes(gender)) throw new Error("Invalid gender specified");
 
         const possibleWeightCategories = ['underweight', 'normal', 'overweight', 'obese'];
