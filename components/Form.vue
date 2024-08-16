@@ -30,12 +30,12 @@ const formData = reactive({
     },
     relationshipStatus: {
         range: [true, false],
-        isSingle: true,
+        status: true,
         percetange: 1,
     },
-    preferredGender: {
+    gender: {
         range: ['total', 'male', 'female'],
-        gender: 'total',
+        status: 'total',
         percetange: 1,
     },
 })
@@ -49,18 +49,57 @@ for (const key in data.value) {
     );
 }
 
-const onPreferencesChange = (name, range) => {
+const apiEndpointMap = {
+    age: 'age',
+    height: 'height',
+    weight: 'weight',
+    income: 'income',
+    relationshipStatus: 'singles',
+    preferredGender: 'gender'
+}
+
+
+async function onPreferencesChange(name, range) {
     console.log(name + " changed to " + range.min + " - " + range.max);
+    if (!Object.keys(formData).includes(name)) throw new Error('Invalid range changed');
+
+    formData[name].min = range.min;
+    formData[name].max = range.max;
+
+    formData[name].percetange = await getPercentageFromDb(apiEndpointMap[name], {
+        minAge: range.min,
+        maxAge: range.max,
+        gender: formData.gender.status
+    });
+    console.log(name + " percetange is " + formData[name].percetange);
 };
 
 const onDropdownChange = (name, value) => {
     console.log(name + " changed to " + value);
+    if (!Object.keys(formData).includes(name)) throw new Error('Invalid dropdown changed');
+
+    formData[name].status = value;
 };
 
+watch(
+    () => [formData.age.percetange, formData.height.percetange, formData.weight.percetange, formData.income.percetange, formData.relationshipStatus.percetange, formData.gender.percetange],
+    ([newAge, newHeight, newWeight, newIncome, newRelationshipStatus, newPreferredGender]) => {
+        console.log('factors are: ', newAge, newHeight, newWeight, newIncome, newRelationshipStatus, newPreferredGender);
+        updateTotalPercentage(newAge * newHeight * newWeight * newIncome * newRelationshipStatus * newPreferredGender);
+    }
+);
+
+async function getPercentageFromDb(endpoint, params) {
+    const { data, status, error } = await $fetch("/api/" + endpoint, {
+        params,
+    });
+    if (error) throw new Error('Error fetching data from the server');
+    return data;
+}
 </script>
 <template>
     <div class="flex flex-row gap-x-10">
-        <Dropdown name="gender" :options="formData.preferredGender.range" @change="onDropdownChange" />
+        <Dropdown name="gender" :options="formData.gender.range" @change="onDropdownChange" />
         <Dropdown name="isSingle" :options="formData.relationshipStatus.range" @change="onDropdownChange" />
     </div>
 
