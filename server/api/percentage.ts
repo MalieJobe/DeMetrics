@@ -4,17 +4,12 @@ export default defineEventHandler(async (event) => {
     try {
         const queryParameters = getQuery(event);
         console.log('Raw query parameters:', queryParameters);
-        // const validParameterKeys = [
-        //     'minAge', 'maxAge', 'minHeight', 'maxHeight',
-        //     'minWeight', 'maxWeight', 'minIncome', 'maxIncome',
-        //     'gender', 'isSingle',
-        // ] as const;
 
         // Define the TypeScript type using the keys
         type ValidParameters = {
             minAge?: number, maxAge?: number,
             minHeight?: number, maxHeight?: number,
-            minWeight?: number, maxWeight?: number,
+            minWeight?: 'underweight' | 'normal' | 'overweight' | 'obese', maxWeight?: 'underweight' | 'normal' | 'overweight' | 'obese',
             minIncome?: number, maxIncome?: number,
             gender?: 'total' | 'male' | 'female', isSingle?: Boolean;
         };
@@ -22,7 +17,7 @@ export default defineEventHandler(async (event) => {
         const validParameterTypes = {
             minAge: 'number', maxAge: 'number',
             minHeight: 'number', maxHeight: 'number',
-            minWeight: 'number', maxWeight: 'number',
+            minWeight: ['underweight', 'normal', 'overweight', 'obese'], maxWeight: ['underweight', 'normal', 'overweight', 'obese'],
             minIncome: 'number', maxIncome: 'number',
             gender: ['total', 'male', 'female'], isSingle: 'boolean',
         };

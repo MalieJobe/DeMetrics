@@ -139,14 +139,20 @@ export default class DBConnector {
             throw new Error("minWeight must passed in before maxWeight");
         }
 
+        if (minWeight === 'underweight' && maxWeight === 'obese') {
+            return 1;
+        }
+
         const selectedWeights = possibleWeightCategories.slice(minWeightIndex, maxWeightIndex + 1);
 
         let sql;
         if (gender === 'total') {
-            sql = `SELECT SUM(${selectedWeights.join(' + ')}) / 2 FROM weight WHERE age_max >= ? AND age_min <= ?`;
+            sql = `SELECT SUM(${selectedWeights.join(' + ')}) / COUNT(${selectedWeights[0]}) FROM weight WHERE age_max >= ? AND age_min <= ?`;
+            console.log('all gender', sql, minAge, maxAge);
             return await this.getSingleValues(sql, [minAge, maxAge]);
         } else {
-            sql = `SELECT SUM(${selectedWeights.join(' + ')}) FROM weight WHERE age_max >= ? AND age_min <= ? AND gender = ?`;
+            sql = `SELECT SUM(${selectedWeights.join(' + ')}) / COUNT(${selectedWeights[0]}) FROM weight WHERE age_max >= ? AND age_min <= ? AND gender = ?`;
+            console.log('specific gender', sql, minAge, maxAge);
             return await this.getSingleValues(sql, [minAge, maxAge, gender]);
         }
     }
