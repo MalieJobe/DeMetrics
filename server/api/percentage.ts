@@ -64,29 +64,20 @@ export default defineEventHandler(async (event) => {
 
         console.log('Database is set up. Percentage set to 1.')
 
-        /**
-         * If age is not used in any of the parameters, calculate the percentage for age alone.
-         * Does not go for income, as it is not take age into account.
-         */
-        const allThatUseAge = ['minHeight', 'maxHeight', 'minWeight', 'maxWeight', 'isSingle'];
 
-        if (!Object.keys(validParameters).some(key => {
-            if (key === 'isSingle' && validParameters[key] === false) return false;
-            return allThatUseAge.includes(key);
-        })) {
-            console.log('No parameter is using Age.');
-            if (validParameters.minAge || validParameters.maxAge) {
-                console.log('Age is requested. Getting percentage.');
-                const args = [validParameters.minAge, validParameters.maxAge, validParameters.gender];
-                const p_age = await dbc.getAgePercentage(...args);
-                totalPercentage *= p_age;
-            }
-        } else { console.log('Age is used in other parameters.'); }
+        if (validParameters.minAge || validParameters.maxAge) {
+            console.log('Age is requested. Getting percentage.');
+            const args = [validParameters.minAge, validParameters.maxAge, validParameters.gender];
+            const p_age = await dbc.getAgePercentage(...args);
+            console.log('Age percentage:', p_age);
+            totalPercentage *= p_age;
+        }
 
         if (validParameters.minHeight || validParameters.maxHeight) {
             console.log('Height is requested. Getting percentage.');
             const args = [validParameters.minHeight, validParameters.maxHeight, validParameters.gender];
             const p_height = await dbc.getHeightPercentage(...args);
+            console.log('Height percentage:', p_height);
             totalPercentage *= p_height;
         }
 
@@ -94,6 +85,7 @@ export default defineEventHandler(async (event) => {
             console.log('Income is requested. Getting percentage.');
             const args = [validParameters.minIncome, validParameters.maxIncome];
             const p_income = await dbc.getIncomePercentage(...args);
+            console.log('Income percentage:', p_income);
             totalPercentage *= p_income;
         }
 
@@ -101,6 +93,7 @@ export default defineEventHandler(async (event) => {
             console.log('Weight is requested. Getting percentage.');
             const args = [validParameters.minWeight, validParameters.maxWeight, validParameters.minAge, validParameters.maxAge, validParameters.gender];
             const p_weight = await dbc.getWeightPercentage(...args);
+            console.log('Weight percentage:', p_weight);
             totalPercentage *= p_weight;
         }
 
@@ -108,7 +101,16 @@ export default defineEventHandler(async (event) => {
             console.log('Single is requested. Getting percentage.');
             const args = [validParameters.minAge, validParameters.maxAge];
             const p_single = await dbc.getSinglesPercentage(...args);
+            console.log('Single percentage:', p_single);
             totalPercentage *= p_single;
+        }
+
+        if (validParameters.gender) {
+            console.log('gender requested. Getting percentage.');
+            const args = [validParameters.gender];
+            const p_gender = await dbc.getGenderPercentage(...args);
+            console.log('Gender percentage:', p_gender);
+            totalPercentage *= p_gender;
         }
 
         setResponseStatus(event, 200);
