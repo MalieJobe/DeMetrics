@@ -69,6 +69,7 @@ function updateSliderPosition(event) {
 onMounted(() => {
     console.log("mounted", computedRange.value.min, computedRange.value.max);
     rangeGradient.value = calculateGradient('#C6C6C6', rangeActiveColor);
+    emitRange();
 });
 
 function debounce(func, timeout = 500) {
