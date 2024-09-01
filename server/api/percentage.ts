@@ -102,14 +102,14 @@ export default defineEventHandler(async (event) => {
             totalOfSelectedGender *= p_weight;
         }
 
-        if (validParameters.isSingle === true) {
-            console.log('Single is requested. Getting percentage.');
-            const args = [validParameters.minAge, validParameters.maxAge];
-            const p_single = await dbc.getSinglesPercentage(...args);
-            console.log('Single percentage:', p_single);
-            totalPercentage *= p_single;
-            totalOfSelectedGender *= p_single;
-        }
+
+        console.log('Single is requested. Getting percentage.');
+        const args = [validParameters.minAge, validParameters.maxAge];
+        const p_single = await dbc.getSinglesPercentage(...args);
+        console.log('Single percentage:', p_single);
+        totalPercentage *= p_single;
+        totalOfSelectedGender *= p_single;
+
 
         if (validParameters.gender) {
             console.log('gender requested. Getting percentage.');
@@ -121,6 +121,17 @@ export default defineEventHandler(async (event) => {
         }
 
         setResponseStatus(event, 200);
+
+        /**
+         * todo
+         * Visual Hierarchy Recommendation:
+            Primary: % of Single [Gender] That Match Your Preferences
+            This is the most actionable and relevant for the user's dating goals.
+            Secondary: % of All [Gender] That Match Your Preferences
+            Important for understanding broader compatibility within the selected gender.
+            Tertiary: % of Total Population That Match Your Preferences
+            Provides general context but is less directly relevant to dating.
+         */
         return {
             data: {
                 totalPercentage,

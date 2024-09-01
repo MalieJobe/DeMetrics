@@ -1,8 +1,17 @@
 <template>
     <section
         class="range_container flex flex-col w-full mx-auto my-4 p-4 bg-primary bg-opacity-5 shadow-md rounded border-gray-200 border-solid border">
-        <aside class="flex justify-between items-center">
+        <aside class="flex justify-between items-center mb-2">
             <h3 class="text-xl font-bold">{{ props.title }}</h3>
+
+            <div class="text-center sm:hidden">
+                <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded whitespace-nowrap">
+                    {{ props.fullRange[computedRange.min] === -Infinity ?
+                        `<${formatNumber(props.fullRange[1], props.unit)}` :
+                        formatNumber(props.fullRange[computedRange.min], props.unit) }} - {{
+                            props.fullRange[computedRange.max] === Infinity ? formatNumber(props.fullRange[rangeLength0Based -
+                                1], props.unit) + ' +' : formatNumber(props.fullRange[computedRange.max], props.unit) }} </span>
+            </div>
         </aside>
         <div class="sliders_control relative min-h-5 mt-5">
             <input class="fromSlider" type="range" v-model.number="computedRange.min" min="0" :max="rangeLength0Based"
@@ -17,7 +26,7 @@
                         formatNumber(props.fullRange[1], props.unit) : formatNumber(props.fullRange[0], props.unit) }}
                 </span>
             </div>
-            <div class="flex-1 text-center">
+            <div class="flex-1 text-center hidden sm:block">
                 <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded whitespace-nowrap">
                     {{ props.fullRange[computedRange.min] === -Infinity ?
                         `<${formatNumber(props.fullRange[1], props.unit)}` : formatNumber(props.fullRange[computedRange.min],

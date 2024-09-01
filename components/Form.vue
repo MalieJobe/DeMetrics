@@ -4,8 +4,6 @@
         <!-- the first item in the options will be the default. dangerous as it can get out of sync with the ref thats set here up top -->
         <Dropdown title="Preferred Gender" :options="[['total', 'All Genders'], ['female', 'Woman'], ['male', 'Men']]"
             @change="onGenderChange" />
-        <Dropdown title="Only Singles?" :options="[[true, 'Yes'], [false, 'No, include Singles']]"
-            @change="onSingleChange" />
     </div>
 
     <RangeSlider title="Age" :fullRange="ageRange" :minStart="20" :maxStart="35" unit="year" @change="onAgeChange" />
@@ -33,7 +31,6 @@ const maxWeight = ref(undefined);
 const minIncome = ref(undefined);
 const maxIncome = ref(undefined);
 
-const isSingle = ref(true);
 const gender = ref('total');
 
 // todo: switch to using BMI instead of categories, then label along the slider
@@ -52,7 +49,7 @@ heightRange.value = processedData.height;
 weightRange.value = processedData.weight;
 incomeRange.value = processedData.income;
 
-watch([minAge, maxAge, minHeight, maxHeight, minWeight, maxWeight, minIncome, maxIncome, gender, isSingle], () => {
+watch([minAge, maxAge, minHeight, maxHeight, minWeight, maxWeight, minIncome, maxIncome, gender], () => {
     callPercentageApi();
 });
 
@@ -69,7 +66,6 @@ async function callPercentageApi() {
             minIncome: minIncome.value,
             maxIncome: maxIncome.value,
             gender: gender.value,
-            isSingle: isSingle.value,
         },
     });
 
@@ -111,10 +107,5 @@ async function onIncomeChange(range) {
 async function onGenderChange(value) {
     console.log('gender changed' + value);
     gender.value = value;
-}
-
-async function onSingleChange(value) {
-    console.log('single changed' + value);
-    isSingle.value = value;
 }
 </script>
