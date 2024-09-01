@@ -1,9 +1,19 @@
 <script setup lang="ts">
 import Mainform from './components/Form.vue';
 
-const totalPercentage = ref(1);
-provide('updateTotalPercentage', (value: number) => {
-  totalPercentage.value = value;
+const percentages = reactive({
+  totalPercentage: 1,
+  totalSinglePercentage: 1,
+  totalOfSelectedGender: 1,
+})
+
+provide('updateTotalPercentage', (p: {
+  totalPercentage: number, totalSinglePercentage: number, totalOfSelectedGender: number
+}) => {
+  console.log(p)
+  percentages.totalPercentage = p.totalPercentage;
+  percentages.totalSinglePercentage = p.totalSinglePercentage;
+  percentages.totalOfSelectedGender = p.totalOfSelectedGender;
 });
 
 </script>
@@ -21,8 +31,9 @@ provide('updateTotalPercentage', (value: number) => {
         </h2>
       </header>
       <main>
-        <h2 class=" text-5xl font-bold text-center p-6 mb-12 border-solid border-black border">{{ totalPercentage * 100
-          }} %
+        <h2 class=" text-5xl font-bold text-center p-6 mb-12 border-solid border-black border">{{
+          percentages.totalPercentage * 100
+        }} %
         </h2>
         <Mainform />
       </main>

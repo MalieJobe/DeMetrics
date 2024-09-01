@@ -37,6 +37,7 @@ const maxIncome = ref(undefined);
 const isSingle = ref(true);
 const gender = ref('total');
 
+// todo: switch to using BMI instead of categories, then label along the slider
 
 const { data } = await useAsyncData('ranges', () => queryContent('ranges').only(['age', 'height', 'weight', 'income']).findOne())
 
@@ -78,6 +79,7 @@ async function callPercentageApi() {
         return;
     }
     if (data) {
+        console.log("Total percentage: " + data.totalPercentage);
         updateTotalPercentage(data);
     }
 }

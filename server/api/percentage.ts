@@ -56,6 +56,8 @@ export default defineEventHandler(async (event) => {
         const dbc = await DBConnector.getInstance(dbFilePath);
 
         let totalPercentage: number = 1;
+        let totalSinglePercentage: number = 1;
+        let totalOfSelectedGender: number = 1;
 
         console.log('Database is set up. Percentage set to 1.')
 
@@ -66,6 +68,8 @@ export default defineEventHandler(async (event) => {
             const p_age = await dbc.getAgePercentage(...args);
             console.log('Age percentage:', p_age);
             totalPercentage *= p_age;
+            totalSinglePercentage *= p_age;
+            totalOfSelectedGender *= p_age;
         }
 
         if (validParameters.minHeight || validParameters.maxHeight) {
@@ -74,6 +78,8 @@ export default defineEventHandler(async (event) => {
             const p_height = await dbc.getHeightPercentage(...args);
             console.log('Height percentage:', p_height);
             totalPercentage *= p_height;
+            totalSinglePercentage *= p_height;
+            totalOfSelectedGender *= p_height;
         }
 
         if (validParameters.minIncome || validParameters.maxIncome) {
@@ -82,6 +88,8 @@ export default defineEventHandler(async (event) => {
             const p_income = await dbc.getIncomePercentage(...args);
             console.log('Income percentage:', p_income);
             totalPercentage *= p_income;
+            totalSinglePercentage *= p_income;
+            totalOfSelectedGender *= p_income;
         }
 
         if (validParameters.minWeight || validParameters.maxWeight) {
@@ -90,6 +98,8 @@ export default defineEventHandler(async (event) => {
             const p_weight = await dbc.getWeightPercentage(...args);
             console.log('Weight percentage:', p_weight);
             totalPercentage *= p_weight;
+            totalSinglePercentage *= p_weight;
+            totalOfSelectedGender *= p_weight;
         }
 
         if (validParameters.isSingle === true) {
@@ -98,6 +108,7 @@ export default defineEventHandler(async (event) => {
             const p_single = await dbc.getSinglesPercentage(...args);
             console.log('Single percentage:', p_single);
             totalPercentage *= p_single;
+            totalOfSelectedGender *= p_single;
         }
 
         if (validParameters.gender) {
@@ -106,11 +117,16 @@ export default defineEventHandler(async (event) => {
             const p_gender = await dbc.getGenderPercentage(...args);
             console.log('Gender percentage:', p_gender);
             totalPercentage *= p_gender;
+            totalSinglePercentage *= p_gender;
         }
 
         setResponseStatus(event, 200);
         return {
-            data: totalPercentage,
+            data: {
+                totalPercentage,
+                totalSinglePercentage,
+                totalOfSelectedGender,
+            },
             status: "Success"
         };
 
