@@ -22,23 +22,31 @@ provide('updateTotalPercentage', (p: {
   <div
     class="antialiased bg-white dark:bg-black text-black dark:text-white min-h-screen place-content-center flex flex-col items-center justify-center text-sm sm:text-base md:px-0 px-2">
     <div class="flex-1 flex flex-col gap-y-16 py-8">
+
       <header>
         <h1
           class=" text-5xl font-bold text-center bg-gradient-to-br from-primary to-accent text-transparent bg-clip-text">
           DateMe<span class=" opacity-30 text-black">trik</span>
         </h1>
-        <h2 class="text-2xl font-semibold text-center">What percentage of the population match your dating preferences?
+        <h2 class="text-2xl font-semibold text-center mt-4">What percentage of the population match your dating
+          preferences?
         </h2>
       </header>
       <main>
         <Mainform />
-        <h3 class=" text-5xl font-bold text-center p-6 mb-12 border-solid border-black border">
-          % of german singles:
-          {{
-            (percentages.totalSinglePercentage * 100).toFixed(4)
-          }} %
-        </h3>
       </main>
+
+      <div class="result mt-8 text-center">
+        <h2 class=" text-3xl font-bold mb-12 underline">Your match probability
+        </h2>
+        <p class="text-7xl font-bold break-all text-balance max-w-3xl">
+          {{
+            (percentages.totalSinglePercentage * 100)
+          }} %</p>
+        <p class="mt-4 text-xl">of german single adults</p>
+
+
+      </div>
       <footer>Created with ❤️ by <a href="https://github.com/MalieJobe/">Malie</a></footer>
     </div>
   </div>
