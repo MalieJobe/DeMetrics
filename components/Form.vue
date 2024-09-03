@@ -1,10 +1,8 @@
 <template>
-    <div class="flex flex-row gap-x-10">
 
-        <!-- the first item in the options will be the default. dangerous as it can get out of sync with the ref thats set here up top -->
-        <Dropdown title="Preferred Gender" :options="[['total', 'All Genders'], ['female', 'Woman'], ['male', 'Men']]"
-            @change="onGenderChange" />
-    </div>
+    <!-- the first item in the options will be the default. dangerous as it can get out of sync with the ref thats set here up top -->
+    <Radio title="Preferred Gender" :options="[['total', 'All Genders'], ['female', 'Woman'], ['male', 'Men']]"
+        @change="onGenderChange" />
 
     <RangeSlider title="Age" :fullRange="ageRange" :minStart="20" :maxStart="35" unit="year" @change="onAgeChange" />
     <RangeSlider title="Height" :fullRange="heightRange" unit="length" @change="onHeightChange" />
