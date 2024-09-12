@@ -9,6 +9,12 @@
     <RangeSlider title="Weight" :fullRange="weightRange" @change="onWeightChange" />
     <RangeSlider title="Income" :fullRange="incomeRange" unit="currency" @change="onIncomeChange" />
 
+    <!-- calculate percentage button -->
+    <button @click="callPercentageApi" class=" font-bold py-2 px-4 border-2 border-solid
+         border-black rounded hover:bg-black hover:text-white transition-colors">
+        Calculate
+    </button>
+
 </template>
 
 <script setup>
@@ -46,20 +52,6 @@ ageRange.value = processedData.age;
 heightRange.value = processedData.height;
 weightRange.value = processedData.weight;
 incomeRange.value = processedData.income;
-
-watch([minAge, maxAge, minHeight, maxHeight, minWeight, maxWeight, minIncome, maxIncome, gender], () => {
-    debounce(callPercentageApi());
-});
-
-function debounce(func, timeout = 500) {
-    let timer;
-    return (...args) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-            func.apply(this, args);
-        }, timeout);
-    };
-}
 
 async function callPercentageApi() {
     const { data, status, error } = await $fetch("/api/percentage", {
