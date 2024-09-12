@@ -8,7 +8,7 @@
                 <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded whitespace-nowrap">
                     {{ props.fullRange[computedRange.min] === -Infinity ?
                         `<${props.fullRange[1]}` : props.fullRange[computedRange.min] }} - {{
-                        props.fullRange[computedRange.max] === Infinity ? props.fullRange[rangeLength0Based - 1] + ' +' :
+                        props.fullRange[computedRange.max] === Infinity ? props.fullRange[rangeLength0Based - 1] + `+` :
                             props.fullRange[computedRange.max] }} </span>
             </div>
         </aside>
@@ -30,14 +30,13 @@
                     {{ props.fullRange[computedRange.min] === -Infinity ?
                         `<${props.fullRange[1]}` : props.fullRange[computedRange.min]
                             }} - {{ props.fullRange[computedRange.max] === Infinity ?
-                                props.fullRange[rangeLength0Based - 1] + ' +' : props.fullRange[computedRange.max] }}
+                                props.fullRange[rangeLength0Based - 1] + `+` : props.fullRange[computedRange.max] }}
                         </span>
             </div>
             <div class="flex-1 text-right">
                 <span class="minmax minmax--left whitespace-nowrap">
                     {{ props.fullRange[rangeLength0Based] === Infinity ?
-                        props.fullRange[rangeLength0Based - 1] + '+' :
-                        props.fullRange[rangeLength0Based] }} </span>
+                        props.fullRange[rangeLength0Based - 1] + `+` : props.fullRange[rangeLength0Based] }} </span>
             </div>
         </div>
     </section>
