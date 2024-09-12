@@ -48,9 +48,18 @@ weightRange.value = processedData.weight;
 incomeRange.value = processedData.income;
 
 watch([minAge, maxAge, minHeight, maxHeight, minWeight, maxWeight, minIncome, maxIncome, gender], () => {
-    callPercentageApi();
+    debounce(callPercentageApi());
 });
 
+function debounce(func, timeout = 500) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            func.apply(this, args);
+        }, timeout);
+    };
+}
 
 async function callPercentageApi() {
     const { data, status, error } = await $fetch("/api/percentage", {

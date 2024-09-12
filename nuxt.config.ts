@@ -17,5 +17,11 @@ export default defineNuxtConfig({
     viewer: false
   },
 
+  // runtimeConfig: {
+  //   public: {
+  //     POSTGRES_URL: process.env.POSTGRES_URL
+  //   }
+  // },
+
   modules: ["@nuxtjs/tailwindcss", "@nuxt/content"]
 })
