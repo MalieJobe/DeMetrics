@@ -19,4 +19,5 @@ npm run preview
 ### Todo
 - [ ] FAQ Pages explaining the logic
 - [ ] Source Page to cite all sources
-- [ ] Move from sqlite3 to Postgres, as no Provider supports sqlite3 well enough
+- [x] Move from sqlite3 to Postgres, as no Provider supports sqlite3 well enough
+- [ ] Set up vercel postgres db for local development
