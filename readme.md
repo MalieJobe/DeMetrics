@@ -21,3 +21,5 @@ npm run preview
 - [ ] Source Page to cite all sources
 - [x] Move from sqlite3 to Postgres, as no Provider supports sqlite3 well enough
 - [ ] Set up vercel postgres db for local development
+- [ ] Refactor percentage.ts. bad TS, bad everything. not DRY
+- [ ] Use german labels for weight
