@@ -1,18 +1,19 @@
 <template>
 
     <!-- the first item in the options will be the default. dangerous as it can get out of sync with the ref thats set here up top -->
-    <Radio title="Preferred Gender" :options="[['total', 'All Genders'], ['female', 'Woman'], ['male', 'Men']]"
+    <Radio title="Interessiert an" :options="[['total', 'Allen'], ['female', 'Frauen'], ['male', 'Männern']]"
         @change="onGenderChange" />
 
-    <RangeSlider title="Age" :fullRange="ageRange" :minStart="20" :maxStart="35" unit="year" @change="onAgeChange" />
-    <RangeSlider title="Height" :fullRange="heightRange" unit="length" @change="onHeightChange" />
-    <RangeSlider title="Weight" :fullRange="weightRange" @change="onWeightChange" />
-    <RangeSlider title="Income" :fullRange="incomeRange" unit="currency" @change="onIncomeChange" />
+    <RangeSlider title="Altersspanne (Jahre)" :fullRange="ageRange" :minStart="20" :maxStart="35" unit="year"
+        @change="onAgeChange" />
+    <RangeSlider title="Größe (cm)" :fullRange="heightRange" unit="length" @change="onHeightChange" />
+    <RangeSlider title="Körperbau (BMI)" :fullRange="weightRange" @change="onWeightChange" />
+    <RangeSlider title="Einkommen (€/Jahr)" :fullRange="incomeRange" unit="currency" @change="onIncomeChange" />
 
     <!-- calculate percentage button -->
     <button @click="callPercentageApi" class=" font-bold py-2 px-4 border-2 border-solid
          border-black rounded hover:bg-black hover:text-white transition-colors">
-        Calculate
+        Berechnen
     </button>
 
 </template>

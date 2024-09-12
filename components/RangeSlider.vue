@@ -7,10 +7,9 @@
             <div class="text-center sm:hidden">
                 <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded whitespace-nowrap">
                     {{ props.fullRange[computedRange.min] === -Infinity ?
-                        `<${formatNumber(props.fullRange[1], props.unit)}` :
-                        formatNumber(props.fullRange[computedRange.min], props.unit) }} - {{
-                            props.fullRange[computedRange.max] === Infinity ? formatNumber(props.fullRange[rangeLength0Based -
-                                1], props.unit) + ' +' : formatNumber(props.fullRange[computedRange.max], props.unit) }} </span>
+                        `<${props.fullRange[1]}` : props.fullRange[computedRange.min] }} - {{
+                        props.fullRange[computedRange.max] === Infinity ? props.fullRange[rangeLength0Based - 1] + ' +' :
+                            props.fullRange[computedRange.max] }} </span>
             </div>
         </aside>
         <div class="sliders_control relative min-h-5 mt-5">
@@ -23,22 +22,22 @@
             <div class="flex-1">
                 <span class="minmax whitespace-nowrap">
                     {{ props.fullRange[0] === -Infinity ? '< ' +
-                        formatNumber(props.fullRange[1], props.unit) : formatNumber(props.fullRange[0], props.unit) }}
+                        props.fullRange[1] : props.fullRange[0] }}
                 </span>
             </div>
             <div class="flex-1 text-center hidden sm:block">
                 <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded whitespace-nowrap">
                     {{ props.fullRange[computedRange.min] === -Infinity ?
-                        `<${formatNumber(props.fullRange[1], props.unit)}` : formatNumber(props.fullRange[computedRange.min],
-                            props.unit) }} - {{ props.fullRange[computedRange.max] === Infinity ?
-                                formatNumber(props.fullRange[rangeLength0Based - 1], props.unit) + ' +' :
-                                formatNumber(props.fullRange[computedRange.max], props.unit) }} </span>
+                        `<${props.fullRange[1]}` : props.fullRange[computedRange.min]
+                            }} - {{ props.fullRange[computedRange.max] === Infinity ?
+                                props.fullRange[rangeLength0Based - 1] + ' +' : props.fullRange[computedRange.max] }}
+                        </span>
             </div>
             <div class="flex-1 text-right">
                 <span class="minmax minmax--left whitespace-nowrap">
                     {{ props.fullRange[rangeLength0Based] === Infinity ?
-                        formatNumber(props.fullRange[rangeLength0Based - 1], props.unit) + '+' :
-                        formatNumber(props.fullRange[rangeLength0Based], props.unit) }} </span>
+                        props.fullRange[rangeLength0Based - 1] + '+' :
+                        props.fullRange[rangeLength0Based] }} </span>
             </div>
         </div>
     </section>
@@ -53,7 +52,6 @@ const props = defineProps({
     minStart: { type: Number, default: 0 },
     maxStart: { type: Number },
     stepSize: { type: Number, default: 1 },
-    unit: { type: String }
 });
 
 const rangeLength0Based = props.fullRange.length - 1;

@@ -28,8 +28,8 @@ provide('updateTotalPercentage', (p: {
           class=" text-5xl font-bold text-center bg-gradient-to-br from-primary to-accent text-transparent bg-clip-text">
           DateMe<span class=" opacity-30 text-black">trik</span>
         </h1>
-        <h2 class="text-2xl font-semibold text-center mt-4">What percentage of the population match your dating
-          preferences?
+        <h2 class="text-2xl font-semibold text-center mt-4">Finde heraus, wie viele Menschen deinen Dating-Kriterien
+          entsprechen!
         </h2>
       </header>
       <main>
@@ -37,17 +37,15 @@ provide('updateTotalPercentage', (p: {
       </main>
 
       <div class="result mt-8 text-center">
-        <h2 class=" text-3xl font-bold mb-12 underline">Your match probability
-        </h2>
+        <h2 class=" text-3xl font-bold mb-12 underline">Match Wahrscheinlichkeit</h2>
         <p class="text-7xl font-bold break-all text-balance max-w-3xl">
           {{
             (percentages.totalSinglePercentage * 100)
           }} %</p>
-        <p class="mt-4 text-xl">of german single adults</p>
+        <p class="mt-4 text-xl">der erwachsenen, deutschen Singles</p>
 
 
       </div>
-      <footer>Created with ❤️ by <a href="https://github.com/MalieJobe/">Malie</a></footer>
     </div>
   </div>
 </template>
