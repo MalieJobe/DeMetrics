@@ -79,7 +79,6 @@ export default defineEventHandler(async (event) => {
         if (validParameters.minIncome || validParameters.maxIncome) {
             const { minIncome = `'-Infinity'`, maxIncome = `'Infinity'` } = validParameters;
             const { rows } = await sql.query(`SELECT SUM(percent) AS percentage FROM income WHERE income_min <= ${maxIncome} AND income_max >= ${minIncome}`);
-            console.log(rows)
             const p_income = Math.min(rows[0]?.percentage ?? 1, 1);
             totalPercentage *= p_income;
             totalSinglePercentage *= p_income;
