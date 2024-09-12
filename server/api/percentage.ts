@@ -67,8 +67,8 @@ export default defineEventHandler(async (event) => {
         if (validParameters.minHeight || validParameters.maxHeight) {
             const { minHeight = 0, maxHeight = 300, gender = 'total' } = validParameters;
             const query = gender === 'total'
-                ? sql.query(`SELECT SUM(female + male) / 2 AS percentage FROM height WHERE height_min >= ${minHeight} AND height_max <= ${maxHeight}`)
-                : sql.query(`SELECT SUM(${gender}) AS percentage FROM height WHERE height_min >= ${minHeight} AND height_max <= ${maxHeight}`);
+                ? sql.query(`SELECT SUM(female + male) / 2 AS percentage FROM height WHERE height_min <= ${maxHeight} AND height_max >= ${minHeight}`)
+                : sql.query(`SELECT SUM(${gender}) AS percentage FROM height WHERE height_min <= ${maxHeight} AND height_max >= ${minHeight}`);
             const { rows } = await query;
             const p_height = Math.min(rows[0]?.percentage ?? 1, 1);
             totalPercentage *= p_height;
@@ -77,8 +77,9 @@ export default defineEventHandler(async (event) => {
         }
 
         if (validParameters.minIncome || validParameters.maxIncome) {
-            const { minIncome = -Infinity, maxIncome = Infinity } = validParameters;
-            const { rows } = await sql.query(`SELECT SUM(percent) AS percentage FROM income WHERE income_min >= ${minIncome} AND income_max <= ${maxIncome}`);
+            const { minIncome = `'-Infinity'`, maxIncome = `'Infinity'` } = validParameters;
+            const { rows } = await sql.query(`SELECT SUM(percent) AS percentage FROM income WHERE income_min <= ${maxIncome} AND income_max >= ${minIncome}`);
+            console.log(rows)
             const p_income = Math.min(rows[0]?.percentage ?? 1, 1);
             totalPercentage *= p_income;
             totalSinglePercentage *= p_income;
