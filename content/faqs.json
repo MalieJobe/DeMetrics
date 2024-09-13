@@ -3,8 +3,7 @@
   {
     "teaser": "Ist das ernst?",
     "reveal": "Jain. Es ist ein Spaßprojekt, das auf realen Daten basiert. Die Daten sind ok genug um eine grobe Schätzung zu machen. Ob der Stil oder Charakter passen, und ob die Person überhaupt bock auf dich hat, kann so ein Rechner wohl kaum sagen."
-  },
-  {
+  }, {
     "teaser": "Woher kommen die Daten?",
     "reveal": "Die Daten kommen aus verschiedenen Studien und Umfragen, die zum Großteil von Destatis durchgeführt wurden. Die genauen Quellen findest du unten auf der Seite."
   }, {
@@ -19,6 +18,9 @@
   }, {
     "teaser": "Warum werden nur Singles berücksichtigt?",
     "reveal": "Klar, einige Menschen leben Polyamorös, haben ein offenes Beziehungsmodell oder gehen einfach Fremd. Auf der anderen Seite kann man argumentieren das einige Singles auch absichtlich Single sind, und somit garnicht 'zur Verfügung' stehen."
+  }, {
+    "teaser": "Wie wird mit den Geschlechtsausprägungen 'unbekannt' oder 'divers' verfahren?",
+    "reveal": "Da diese Gruppe an Menschen klein ist, kann sie in Datenerhebungen oft nicht berücksichtigt werden. Für mehr Information siehe die Quellen zu 'Geschlecht' unten auf der Seite."
   }, {
     "teaser": "Was passiert mit meinen Eingaben / Daten?",
     "reveal": "Es werden keine Daten von dir gespeichert. Alles wird direkt nach der Berechnung verworfen."
