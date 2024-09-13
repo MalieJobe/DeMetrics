@@ -81,31 +81,26 @@ async function callPercentageApi() {
 
 
 async function onAgeChange(range) {
-    console.log("Age changed to " + range.min + " - " + range.max);
     minAge.value = range.min;
     maxAge.value = range.max;
 }
 
 async function onHeightChange(range) {
-    console.log("Height changed to " + range.min + " - " + range.max);
     minHeight.value = range.min;
     maxHeight.value = range.max;
 }
 
 async function onWeightChange(range) {
-    console.log("Weight changed to " + range.min + " - " + range.max);
     minWeight.value = range.min;
     maxWeight.value = range.max;
 }
 
 async function onIncomeChange(range) {
-    console.log("Income changed to " + range.min + " - " + range.max);
     minIncome.value = range.min;
     maxIncome.value = range.max;
 }
 
 async function onGenderChange(value) {
-    console.log('gender changed' + value);
     gender.value = value;
 }
 </script>
