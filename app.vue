@@ -1,4 +1,14 @@
 <script setup lang="ts">
+useHead({
+  title: 'DateMetrik - Dating Rechner',
+  meta: [
+    { name: 'description', content: 'Finde heraus, wie viele Menschen deinen Dating-Kriterien entsprechen!' }
+  ],
+  htmlAttrs: {
+    lang: 'de',
+  },
+})
+
 import FAQs from './components/FAQs.vue';
 import Mainform from './components/Form.vue';
 
