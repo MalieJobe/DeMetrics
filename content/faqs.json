@@ -1,6 +1,10 @@
 {
 "faqs": [
-    {
+  {
+    "teaser": "Ist das ernst?",
+    "reveal": "Jain. Es ist ein Spaßprojekt, das auf realen Daten basiert. Die Daten sind ok genug um eine grobe Schätzung zu machen. Ob der Stil oder Charakter passen, und ob die Person überhaupt bock auf dich hat, kann so ein Rechner wohl kaum sagen."
+  },
+  {
     "teaser": "Woher kommen die Daten?",
     "reveal": "Die Daten kommen aus verschiedenen Studien und Umfragen, die zum Großteil von Destatis durchgeführt wurden. Die genauen Quellen findest du unten auf der Seite."
   }, {
@@ -11,9 +15,12 @@
     "reveal": "Nicht sehr genau. Wie in der vorherigen Frage beschrieben, werden die Prozentzahlen 'einfach' multipliziert. Hier werden viele Überschneidungen nicht berücksichtigt. Es kann zum Beispiel sein das Männer eine ganz andere Altersverteilung haben als Frauen. Das gleiche gilt für Einkommen (Gender Pay Gap), Gewicht etc. Leider gibt es solch granulare Daten nicht."
   }, {
     "teaser": "Warum geht es erst bei 18 Jahren los?",
-    "reveal": "Natürlich ist es schade, dass wir jüngere Menschen ausschließen die diesen Rechner gerne nutzen würden. Aber wir haben uns dazu entschieden um Menschen zu schützen und kein Fragwürdiges Verhalten zu fördern."
+    "reveal": "Natürlich ist es schade, jüngere Menschen auszuschließen die diesen Rechner gerne nutzen würden. Aber ich habe mich dazu entschieden um Menschen zu schützen und kein fragwürdiges Verhalten zu fördern."
+  }, {
+    "teaser": "Warum werden nur Singles berücksichtigt?",
+    "reveal": "Klar, einige Menschen leben Polyamorös, haben ein offenes Beziehungsmodell oder gehen einfach Fremd. Auf der anderen Seite kann man argumentieren das einige Singles auch absichtlich Single sind, und somit garnicht 'zur Verfügung' stehen."
   }, {
     "teaser": "Was passiert mit meinen Eingaben / Daten?",
-    "reveal": "Wir speichern keine Daten von dir. Alles wird direkt nach der Berechnung verworfen."
+    "reveal": "Es werden keine Daten von dir gespeichert. Alles wird direkt nach der Berechnung verworfen."
   }
 ]}

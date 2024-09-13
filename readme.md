@@ -17,8 +17,8 @@ npm run preview
 ```
 
 ### Todo
-- [ ] FAQ Pages explaining the logic
-- [ ] Source Page to cite all sources
+- [x] FAQ Pages explaining the logic
+- [x] Source Page to cite all sources
 - [x] Move from sqlite3 to Postgres, as no Provider supports sqlite3 well enough
 - [ ] Set up vercel postgres db for local development
 - [ ] Refactor percentage.ts. bad TS, bad everything. not DRY

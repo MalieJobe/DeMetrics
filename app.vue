@@ -51,6 +51,81 @@ const faqs = faqsData.value?.faqs;
 
         <footer>
           <FAQs :faqs />
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th class="px-6 py-3">Kategorie</th>
+                <th class="px-6 py-3">Quellen</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td class="px-6 py-4">Geschlecht</td>
+                <td class="px-6 py-4">
+                  <ul class="list-disc">
+                    <li>
+                  <a href="https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Bevoelkerungsstand/Tabellen/deutsche-nichtdeutsche-bevoelkerung-nach-geschlecht-deutschland.html" target="_blank">
+                    Bevölkerung nach Nationalität und Geschlecht - Statistisches Bundesamt (destatis.de)
+                  </a></li>
+                  <li>
+                  <a href="https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Bevoelkerungsstand/Methoden/Erlauterungen/geschlechtsauspraegungen.html" target="_blank">
+                    Wie wird mit den Daten von Personen mit den Geschlechtsausprägungen 'unbekannt' oder 'divers' verfahren? - Statistisches Bundesamt (destatis.de)
+                  </a>
+                  </li>
+                  </ul>
+                </td>
+              </tr>
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td class="px-6 py-4">Alter</td>
+                <td class="px-6 py-4">
+                  <a href="https://service.destatis.de/bevoelkerungspyramide/index.html#!y=2023" target="_blank">
+                    Bevölkerungspyramide: Altersstruktur Deutschlands von 1950 - 2070 (destatis.de)
+                  </a>
+                </td>
+              </tr>
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td class="px-6 py-4">Größe</td>
+                <td class="px-6 py-4">
+                  <a href="https://de.statista.com/statistik/daten/studie/1825/umfrage/koerpergroesse-nach-geschlecht/">
+                    Körpergröße nach Geschlecht 2006 | Statista
+                  </a>
+                </td>
+              </tr>
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td class="px-6 py-4">Köperbau</td>
+                <td class="px-6 py-4">
+                  <ul class="list-disc">
+                    <li>
+                  <a href="https://www.bpb.de/kurz-knapp/zahlen-und-fakten/soziale-situation-in-deutschland/516115/uebergewicht/" target="_blank" rel="noopener noreferrer">
+                    Übergewicht | Die soziale Situation in Deutschland | bpb.de
+                  </a></li>
+                  <li>
+                    <a href="https://www.rki.de/DE/Content/Kommissionen/Bundesgesundheitsblatt/Downloads/2019_10_Schienkiewitz_BMI.pdf?__blob=publicationFile" target="_blank" rel="noopener noreferrer">
+                      Tabelle 1: Body-Mass-Index von Kindern und Jugendlichen: Prävalenzen und Verteilung unter Berücksichtigung von Untergewicht und extremer Adipositas
+                    </a>
+                  </li>
+                </ul>
+                </td>
+              </tr>
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td class="px-6 py-4">Einkommen</td>
+                <td class="px-6 py-4">
+                  <a href="https://www.einkommensverteilung.eu/deutschland/" target="_blank">
+                    Einkommensverteilung Deutschland | einkommensverteilung.eu
+                  </a>
+                </td>
+              </tr>
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td class="px-6 py-4">Beziehungsstatus</td>
+                <td class="px-6 py-4">
+                  <a href="https://de.statista.com/statistik/daten/studie/286794/umfrage/umfrage-in-deutschland-zur-anzahl-der-singles-nach-alter/" target="_blank">
+                    Singles in Deutschland nach Alter 2021 | Statista
+                  </a>
+                </td>
+              </tr>
+              
+            </tbody>
+          </table>
         </footer>
       </div>
     </div>
