@@ -16,6 +16,9 @@ export default defineNuxtConfig({
   tailwindcss: {
     viewer: false
   },
+  colorMode: {
+    preference: 'light',
+  },
 
-  modules: ["@nuxtjs/tailwindcss", "@nuxt/content"]
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/content", '@nuxtjs/color-mode']
 })
