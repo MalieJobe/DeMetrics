@@ -13,14 +13,14 @@
     "teaser": "Wie genau ist das Ergebnis?",
     "reveal": "Nicht sehr genau. Wie in der vorherigen Frage beschrieben, werden die Prozentzahlen 'einfach' multipliziert. Hier werden viele Überschneidungen nicht berücksichtigt. Es kann zum Beispiel sein das Männer eine ganz andere Altersverteilung haben als Frauen. Das gleiche gilt für Einkommen (Gender Pay Gap), Gewicht etc. Leider gibt es solch granulare Daten nicht."
   }, {
-    "teaser": "Warum geht es erst bei 18 Jahren los?",
-    "reveal": "Natürlich ist es schade, jüngere Menschen auszuschließen die diesen Rechner gerne nutzen würden. Aber ich habe mich dazu entschieden um Menschen zu schützen und kein fragwürdiges Verhalten zu fördern."
-  }, {
     "teaser": "Warum werden nur Singles berücksichtigt?",
     "reveal": "Klar, einige Menschen leben Polyamorös, haben ein offenes Beziehungsmodell oder gehen einfach Fremd. Auf der anderen Seite kann man argumentieren das einige Singles auch absichtlich Single sind, und somit garnicht 'zur Verfügung' stehen."
   }, {
     "teaser": "Wie wird mit den Geschlechtsausprägungen 'unbekannt' oder 'divers' verfahren?",
     "reveal": "Da diese Gruppe an Menschen klein ist, kann sie in Datenerhebungen oft nicht berücksichtigt werden. Für mehr Information siehe die Quellen zu 'Geschlecht' unten auf der Seite."
+  }, {
+    "teaser": "Warum geht es erst bei 18 Jahren los?",
+    "reveal": "Natürlich ist es schade, jüngere Menschen auszuschließen die diesen Rechner gerne nutzen würden. Diese Entscheidung wurde getroffen um fragwürdiges Verhalten nicht zu fördern."
   }, {
     "teaser": "Was passiert mit meinen Eingaben / Daten?",
     "reveal": "Es werden keine Daten von dir gespeichert. Alles wird direkt nach der Berechnung verworfen."
