@@ -4,41 +4,45 @@
         <aside class="flex justify-between items-center mb-2">
             <h3 class="text-xl font-bold">{{ props.title }}</h3>
 
-            <div class="text-center sm:hidden">
-                <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded whitespace-nowrap">
-                    {{ props.fullRange[computedRange.min] === -Infinity ?
-                        `<${props.fullRange[1]}` : props.fullRange[computedRange.min] }} - {{
-                        props.fullRange[computedRange.max] === Infinity ? props.fullRange[rangeLength0Based - 1] + `+` :
-                            props.fullRange[computedRange.max] }} </span>
+            <div class="text-center">
+                <span class=" bg-gray-200 py-1 px-3 rounded whitespace-nowrap">
+                    {{ props.fullRange[0] === -Infinity ? '< ' + props.fullRange[1] : props.fullRange[0] }}
+                     - 
+                    {{ props.fullRange[rangeLength0Based] === Infinity ? props.fullRange[rangeLength0Based - 1] + `+` : props.fullRange[rangeLength0Based] }}
+                </span>
             </div>
         </aside>
         <div class="sliders_control relative min-h-5 mt-5">
-            <input class="fromSlider" type="range" v-model.number="computedRange.min" min="0" :max="rangeLength0Based"
-                :step="stepSize" @input="updateSliderPosition" />
-            <input class="toSlider" type="range" v-model.number="computedRange.max" min="0" :max="rangeLength0Based"
-                :step="stepSize" :style="{ background: rangeGradient }" @input="updateSliderPosition" />
+            <input class="fromSlider" type="range" v-model.number="computedRange.min"
+                min="0" :max="rangeLength0Based" :step="stepSize"
+                @input="updateSliderPosition" />
+            <input class="toSlider" type="range" v-model.number="computedRange.max"
+                min="0" :max="rangeLength0Based" :step="stepSize" :style="{ background: rangeGradient }"
+                @input="updateSliderPosition" />
         </div>
-        <div class="flex justify-between mt-2 items-center">
+        <div class="flex justify-between mt-2 items-center font-bold">
             <div class="flex-1">
-                <span class="minmax whitespace-nowrap">
-                    {{ props.fullRange[0] === -Infinity ? '< ' +
-                        props.fullRange[1] : props.fullRange[0] }}
+                <span class="minmax bg-secondary bg-opacity-30 py-1 px-2
+                            rounded text-sm relative whitespace-nowrap">
+                    {{
+                        props.fullRange[computedRange.min] === -Infinity ?
+                        `<${props.fullRange[1]}` :
+                        props.fullRange[computedRange.min]
+                    }}
                 </span>
             </div>
-            <div class="flex-1 text-center hidden sm:block">
-                <span class=" bg-secondary bg-opacity-30 font-bold py-1 px-3 rounded whitespace-nowrap">
-                    {{ props.fullRange[computedRange.min] === -Infinity ?
-                        `<${props.fullRange[1]}` : props.fullRange[computedRange.min]
-                            }} - {{ props.fullRange[computedRange.max] === Infinity ?
-                                props.fullRange[rangeLength0Based - 1] + `+` : props.fullRange[computedRange.max] }}
-                        </span>
-            </div>
+
             <div class="flex-1 text-right">
-                <span class="minmax minmax--left whitespace-nowrap">
-                    {{ props.fullRange[rangeLength0Based] === Infinity ?
-                        props.fullRange[rangeLength0Based - 1] + `+` : props.fullRange[rangeLength0Based] }} </span>
+                <span class="minmax bg-secondary bg-opacity-30
+                            py-1 px-2 rounded text-sm relative minmax--left whitespace-nowrap">
+                    {{
+                        props.fullRange[computedRange.max] === Infinity ?
+                        props.fullRange[rangeLength0Based - 1] + `+` :
+                        props.fullRange[computedRange.max]
+                    }}
+                </span>
             </div>
-        </div>
+            </div>
     </section>
 </template>
 
@@ -73,7 +77,6 @@ function updateSliderPosition(event) {
 }
 
 onMounted(() => {
-    console.log("mounted", computedRange.value.min, computedRange.value.max);
     rangeGradient.value = calculateGradient('#C6C6C6', rangeActiveColor);
     emitRange();
 });
@@ -111,10 +114,6 @@ function calculateGradient(baseColor, activeColor) {
 </script>
 
 <style lang="postcss">
-.minmax {
-    @apply bg-gray-200 py-1 px-2 rounded text-sm relative;
-}
-
 .minmax::before {
     content: "";
     border-width: 10px;
@@ -122,14 +121,14 @@ function calculateGradient(baseColor, activeColor) {
     left: 0;
     transform: translateY(-100%);
     position: absolute;
-    border-color: transparent transparent transparent #e5e7eb;
+    border-color: transparent transparent transparent rgb(243, 213, 247);
     /* Triangle color */
 }
 
 .minmax--left::before {
     right: 0;
     left: auto;
-    border-color: transparent #e5e7eb transparent transparent;
+    border-color: transparent rgb(243, 213, 247) transparent transparent;
 }
 
 
