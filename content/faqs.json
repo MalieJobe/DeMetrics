@@ -1,0 +1,19 @@
+{
+"faqs": [
+    {
+    "teaser": "Woher kommen die Daten?",
+    "reveal": "Die Daten kommen aus verschiedenen Studien und Umfragen, die zum Großteil von Destatis durchgeführt wurden. Die genauen Quellen findest du unten auf der Seite."
+  }, {
+    "teaser": "Wie wird das berechnet?",
+    "reveal": "Die Daten wurden als Tabellen angelegt, worin die Prozentzahl nachgeschaut wird, die auf die Eingaben zutrifft. Diese Prozentzahl wird dann in die Berechnung der Match-Wahrscheinlichkeit einbezogen. Beispiel: 50% der Menschen sind Männer. Und ca. 50% der Menschen sind über 53 Jahre alt. Für Männer die über 53 sind werden die Prozentzahlen dann multipliziert: 50% * 50% = 25%. Das bedeutet, dass 25% der Menschen in Deutschland Männer sind, die über 53 Jahre alt sind."
+  }, {
+    "teaser": "Wie genau ist das Ergebnis?",
+    "reveal": "Nicht sehr genau. Wie in der vorherigen Frage beschrieben, werden die Prozentzahlen 'einfach' multipliziert. Hier werden viele Überschneidungen nicht berücksichtigt. Es kann zum Beispiel sein das Männer eine ganz andere Altersverteilung haben als Frauen. Das gleiche gilt für Einkommen (Gender Pay Gap), Gewicht etc. Leider gibt es solch granulare Daten nicht."
+  }, {
+    "teaser": "Warum geht es erst bei 18 Jahren los?",
+    "reveal": "Natürlich ist es schade, dass wir jüngere Menschen ausschließen die diesen Rechner gerne nutzen würden. Aber wir haben uns dazu entschieden um Menschen zu schützen und kein Fragwürdiges Verhalten zu fördern."
+  }, {
+    "teaser": "Was passiert mit meinen Eingaben / Daten?",
+    "reveal": "Wir speichern keine Daten von dir. Alles wird direkt nach der Berechnung verworfen."
+  }
+]}

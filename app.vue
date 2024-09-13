@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import FAQs from './components/FAQs.vue';
 import Mainform from './components/Form.vue';
 
 const percentages = reactive({
@@ -16,12 +17,15 @@ provide('updateTotalPercentage', (p: {
   percentages.totalOfSelectedGender = p.totalOfSelectedGender;
 });
 
+
+const {data: faqsData} = await useAsyncData('faqs', () => queryContent('faqs').findOne())
+const faqs = faqsData.value?.faqs;
 </script>
 
 <template>
   <div
     class="antialiased bg-white dark:bg-black text-black dark:text-white min-h-screen place-content-center flex flex-col items-center justify-center text-sm sm:text-base md:px-0 px-2">
-    <div class="flex-1 flex flex-col gap-y-16 py-8">
+    <div class="flex-1 flex flex-col gap-y-16 py-8 w-full md:w-[800px] max-w-2xl">
 
       <header>
         <h1
@@ -29,7 +33,7 @@ provide('updateTotalPercentage', (p: {
           DateMe<span class=" opacity-30 text-black">trik</span>
         </h1>
         <h2 class="text-2xl font-semibold text-center mt-4">Finde heraus, wie viele Menschen deinen Dating-Kriterien
-          entsprechen!
+          entsprechen! 
         </h2>
       </header>
       <main>
@@ -45,6 +49,9 @@ provide('updateTotalPercentage', (p: {
         <p class="mt-4 text-xl">der erwachsenen, deutschen Singles</p>
 
 
+        <footer>
+          <FAQs :faqs />
+        </footer>
       </div>
     </div>
   </div>
