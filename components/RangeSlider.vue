@@ -12,7 +12,7 @@
                 </span>
             </div>
         </aside>
-        <div class="sliders_control relative min-h-5 mt-5">
+        <div class="sliders_control relative min-h-5 mt-5" ref="slider">
             <input class="fromSlider" type="range" v-model.number="computedRange.min"
                 min="0" :max="rangeLength0Based" :step="stepSize"
                 @input="updateSliderPosition" />
@@ -20,8 +20,8 @@
                 min="0" :max="rangeLength0Based" :step="stepSize" :style="{ background: rangeGradient }"
                 @input="updateSliderPosition" />
         </div>
-        <div class="flex justify-between mt-2 items-center font-bold">
-            <div class="flex-1">
+        <div class="mt-2 items-center relative h-6">
+            <div class="absolute" :style="{ left: rangeLabelPosition.from + `px` }" ref="fromLabel">
                 <span class="minmax bg-secondary bg-opacity-30 py-1 px-2
                             rounded text-sm relative whitespace-nowrap">
                     {{
@@ -32,7 +32,7 @@
                 </span>
             </div>
 
-            <div class="flex-1 text-right">
+            <div class="absolute" :style="{ left: rangeLabelPosition.to + `px` }" ref="toLabel">
                 <span class="minmax bg-secondary bg-opacity-30
                             py-1 px-2 rounded text-sm relative minmax--left whitespace-nowrap">
                     {{
@@ -63,7 +63,13 @@ const computedRange = ref({ min: props.minStart, max: props.maxStart || rangeLen
 const rangeGradient = ref('');
 const rangeActiveColor = "#e364b3";
 
+const rangeLabelPosition = ref({ from: 0, to: 0 });
+const fromLabel = useTemplateRef('fromLabel');
+const toLabel = useTemplateRef('toLabel');
+const slider = useTemplateRef('slider');
+
 function updateSliderPosition(event) {
+    console.log('stop')
     if (computedRange.value.min > computedRange.value.max) {
         const activeSlider = event.target.classList.contains('fromSlider') ? 'from' : 'to';
         if (activeSlider === 'from') {
@@ -72,12 +78,23 @@ function updateSliderPosition(event) {
             computedRange.value.min = computedRange.value.max;
         }
     }
+
     rangeGradient.value = calculateGradient('#C6C6C6', rangeActiveColor);
+    updateLabelPosition();
     emitRange();
+}
+
+function updateLabelPosition() {
+    let fromDistance = (computedRange.value.min) / (rangeLength0Based) * slider.value.clientWidth;
+    let toDistance = (computedRange.value.max) / (rangeLength0Based) * slider.value.clientWidth - toLabel.value.clientWidth;
+
+    rangeLabelPosition.value = { from: fromDistance, to: toDistance };
+    console.log(rangeLabelPosition.value);
 }
 
 onMounted(() => {
     rangeGradient.value = calculateGradient('#C6C6C6', rangeActiveColor);
+    updateLabelPosition();
     emitRange();
 });
 
