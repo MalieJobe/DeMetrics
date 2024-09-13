@@ -11,8 +11,11 @@
     <RangeSlider title="Einkommen (€/Jahr)" :fullRange="incomeRange" unit="currency" @change="onIncomeChange" />
 
     <!-- calculate percentage button -->
-    <button @click="callPercentageApi" class=" font-bold py-2 px-4 border-2 border-solid
-         border-black rounded hover:bg-black hover:text-white transition-colors">
+    <button @click="callPercentageApi"
+        class="block mx-auto w-full sm:w-1/2 font-bold text-2xl break-word 
+            py-2 px-4 rounded bg-gradient-to-br from-primary to-accent mt-12
+            shadow-md text-transparent bg-clip-text border-primary border-opacity-30 border
+            uppercase hover:shadow-xl transition-shadow">
         Berechnen
     </button>
 
@@ -54,7 +57,11 @@ heightRange.value = processedData.height;
 weightRange.value = processedData.weight;
 incomeRange.value = processedData.income;
 
+const emit = defineEmits(['statusUpdate', 'genderSelect']);
+
 async function callPercentageApi() {
+    emit('statusUpdate', 'loading');
+
     const { data, status, error } = await $fetch("/api/percentage", {
         params: {
             minAge: minAge.value,
@@ -71,10 +78,10 @@ async function callPercentageApi() {
 
     if (error) {
         console.error(error);
+        emit('statusUpdate', 'error');
         return;
     }
     if (data) {
-        console.log("Total percentage: " + data.totalPercentage);
         updateTotalPercentage(data);
     }
 }
@@ -102,5 +109,6 @@ async function onIncomeChange(range) {
 
 async function onGenderChange(value) {
     gender.value = value;
+    emit('genderSelect', value);
 }
 </script>

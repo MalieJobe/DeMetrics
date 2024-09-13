@@ -2,19 +2,14 @@
 import FAQs from './components/FAQs.vue';
 import Mainform from './components/Form.vue';
 
-const percentages = reactive({
-  totalPercentage: 1,
-  totalSinglePercentage: 1,
-  totalOfSelectedGender: 1,
-})
+const status = ref('new'); // new, loading, loaded, error
 
-provide('updateTotalPercentage', (p: {
-  totalPercentage: number, totalSinglePercentage: number, totalOfSelectedGender: number
-}) => {
-  console.log(p)
-  percentages.totalPercentage = p.totalPercentage;
-  percentages.totalSinglePercentage = p.totalSinglePercentage;
-  percentages.totalOfSelectedGender = p.totalOfSelectedGender;
+const percentageOfSelectedGender = ref(1);
+const selectedGender = ref('total'); // total, male, female
+
+provide('updateTotalPercentage', (p:any) => {
+  percentageOfSelectedGender.value = p.totalOfSelectedGender;
+  status.value = 'loaded';
 });
 
 
@@ -25,7 +20,7 @@ const faqs = faqsData.value?.faqs;
 <template>
   <div
     class="antialiased bg-white dark:bg-black text-black dark:text-white min-h-screen place-content-center flex flex-col items-center justify-center text-sm sm:text-base md:px-0 px-2">
-    <div class="flex-1 flex flex-col gap-y-16 py-8 w-full md:w-[800px] max-w-2xl">
+    <div class="flex-1 py-8 w-full md:w-[800px] max-w-2xl">
 
       <header>
         <h1
@@ -36,17 +31,25 @@ const faqs = faqsData.value?.faqs;
           entsprechen! 
         </h2>
       </header>
-      <main>
-        <Mainform />
+      <main class="mt-8">
+        <Mainform
+          @status-update="(newStatus)=>status = newStatus"
+          @gender-select="(newGender)=>selectedGender = newGender" />
       </main>
 
-      <div class="result mt-8 text-center">
-        <h2 class=" text-3xl font-bold mb-12 underline">Match Wahrscheinlichkeit</h2>
-        <p class="text-7xl font-bold break-all text-balance max-w-3xl">
-          {{
-            (percentages.totalSinglePercentage * 100)
-          }} %</p>
-        <p class="mt-4 text-xl">der erwachsenen, deutschen Singles</p>
+      <div class="result mt-4 text-center">
+        <p class="text-5xl font-bold break-all text-balance max-w-3xl">
+          <span v-if="status === 'new'">XX,XXX %</span>
+          <span v-else-if="status === 'loading'">rechnet...</span>
+          <span v-else-if="status === 'error'">Fehler :/</span>
+          <span v-else>{{ (percentageOfSelectedGender * 100) }} %</span>
+        </p>
+        <p class="mt-2 text-lg max-w-96 mx-auto leading-6">
+          der erwachsenen, deutschen{{ selectedGender === 'male' ? ', männlichen' : selectedGender === 'female' ? ', weiblichen' : '' }} Singles entsprechen deinen Kriterien.
+        </p>
+        <p class="text-lg max-w-96 mx-auto leading-6">
+          Das sind ungefähr <span class="font-bold">{{ Math.floor(69763000 * (selectedGender === 'male' || selectedGender === 'female' ? 0.5 : 1) * percentageOfSelectedGender).toLocaleString('de-DE') }} Menschen</span> in Deutschland.
+        </p>
 
 
         <footer>

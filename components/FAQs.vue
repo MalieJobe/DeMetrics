@@ -2,18 +2,18 @@
     <div class="flex flex-col gap-y-2 my-8">
         <div v-for="faq in props.faqs" :key="faq.teaser" class="text-left w-full">
             <div @click="() => changeState(faq.teaser)" @keyup.space="() => changeState(faq.teaser)" tabindex="0"
-                class="text-lg bg-primary bg-opacity-25 hover:bg-opacity-40 rounded
+                class="text-lg bg-primary bg-opacity-15 hover:bg-opacity-30 rounded
                         px-3 py-2 cursor-pointer flex justify-between items-center transition-colors">
                 <h5
-                    class="font-medium">
+                    class="font-medium pr-2">
                     {{ faq.teaser }}
                 </h5>
                 <span :class="{'rotate-180': (expanededOne === faq.teaser)}"
-                    class=" duration-300 transition-transform pl-2">&#9660;</span>
+                    class=" duration-300 transition-transform">&#9660;</span>
             </div>
             <div :class="{'max-h-96 py-2': (expanededOne === faq.teaser)}"
                 class="max-h-0 transition-all duration-300 collapsible overflow-hidden 
-                bg-primary bg-opacity-10 px-3 rounded-b">
+                bg-primary bg-opacity-5 px-3 rounded-b border border-t-0 border-gray-200">
                 {{ faq.reveal }}
             </div>
 
