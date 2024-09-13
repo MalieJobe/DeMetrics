@@ -16,8 +16,6 @@
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@vercel/postgres": "^0.10.0",
     "nuxt": "^3.13.1",
-    "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7",
     "vue": "^3.5.4"
   }
 }
