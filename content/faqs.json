@@ -5,7 +5,7 @@
     "reveal": "Jain. Es ist ein Spaßprojekt, das auf realen Daten basiert. Die Daten sind ok genug um eine grobe Schätzung zu machen. Ob der Stil oder Charakter passen, und ob die Person überhaupt bock auf dich hat, kann so ein Rechner wohl kaum sagen. Das Projekt ist angelehnt an den <a href='https://igotstandardsbro.com/' target='_blank'>\"Female Delusion Calculator\"</a>."
   }, {
     "teaser": "Woher kommen die Daten?",
-    "reveal": "Die Daten kommen aus verschiedenen Studien und Umfragen, die zum Großteil von Destatis durchgeführt wurden. Die genauen Quellen findest du unten auf der Seite."
+    "reveal": "Die Daten kommen aus verschiedenen Studien und Umfragen, die zum Großteil von Destatis durchgeführt wurden. Die genauen Quellen findest du unten auf der Seite. Eine Kopie der Datenbank findest du <a href='https://github.com/MalieJobe/DeMetrics/tree/main/server/data' target='_blank'>auf GitHub</a> als Excel-Tabelle und SQL Datei."
   }, {
     "teaser": "Wie wird das berechnet?",
     "reveal": "Die Daten wurden als Tabellen angelegt, worin die Prozentzahl nachgeschaut wird, die auf die Eingaben zutrifft. Diese Prozentzahl wird dann in die Berechnung der Match-Wahrscheinlichkeit einbezogen. Beispiel: 50% der Menschen sind Männer. Und ca. 50% der Menschen sind über 53 Jahre alt. Für Männer die über 53 sind werden die Prozentzahlen dann multipliziert: 50% * 50% = 25%. Das bedeutet, dass 25% der Menschen in Deutschland Männer sind, die über 53 Jahre alt sind."
