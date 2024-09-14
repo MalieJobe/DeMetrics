@@ -4,7 +4,7 @@
     <Radio title="Interessiert an" :options="[['total', 'Allen'], ['female', 'Frauen'], ['male', 'Männern']]"
         @change="onGenderChange" />
 
-    <RangeSlider title="Altersspanne (Jahre)" :fullRange="ageRange" :minStart="20" :maxStart="35" unit="year"
+    <RangeSlider title="Altersspanne (Jahre)" :fullRange="ageRange" :minStart="0" :maxStart="37" unit="year"
         @change="onAgeChange" />
     <RangeSlider title="Größe (cm)" :fullRange="heightRange" unit="length" @change="onHeightChange" />
     <RangeSlider title="Körperbau (BMI)" :fullRange="weightRange" @change="onWeightChange" />
@@ -41,8 +41,6 @@ const maxIncome = ref(undefined);
 
 const gender = ref('total');
 
-// todo: switch to using BMI instead of categories, then label along the slider
-
 const { data } = await useAsyncData('ranges', () => queryContent('ranges').only(['age', 'height', 'weight', 'income']).findOne())
 
 let processedData = {};
@@ -61,6 +59,8 @@ const emit = defineEmits(['statusUpdate', 'genderSelect']);
 
 async function callPercentageApi() {
     emit('statusUpdate', 'loading');
+    emit('genderSelect', gender.value);
+
 
     const { data, status, error } = await $fetch("/api/percentage", {
         params: {
@@ -109,6 +109,5 @@ async function onIncomeChange(range) {
 
 async function onGenderChange(value) {
     gender.value = value;
-    emit('genderSelect', value);
 }
 </script>

@@ -6,9 +6,10 @@
 
             <div class="text-center">
                 <span class=" bg-gray-200 py-1 px-3 rounded whitespace-nowrap">
-                    {{ props.fullRange[0] === -Infinity ? '< ' + props.fullRange[1] : props.fullRange[0] }}
-                     - 
-                    {{ props.fullRange[rangeLength0Based] === Infinity ? props.fullRange[rangeLength0Based - 1] + `+` : props.fullRange[rangeLength0Based] }}
+                    {{ props.fullRange[0] === -Infinity ? '<' + props.fullRange[1] : props.fullRange[0] }}
+                     bis 
+                     <!-- locale string for Tsd. seperator -->
+                    {{ props.fullRange[rangeLength0Based] === Infinity ? props.fullRange[rangeLength0Based - 1].toLocaleString('de-DE') + `+` : props.fullRange[rangeLength0Based].toLocaleString('de-DE') }}
                 </span>
             </div>
         </aside>
@@ -24,10 +25,11 @@
             <div class="flex-1">
                 <span class="minmax bg-secondary bg-opacity-30 py-1 px-2
                             rounded text-sm relative whitespace-nowrap">
+                    <!-- locale string for Tsd. seperator -->
                     {{
                         props.fullRange[computedRange.min] === -Infinity ?
-                        `<${props.fullRange[1]}` :
-                        props.fullRange[computedRange.min]
+                        `<${props.fullRange[1].toLocaleString('de-DE')}` :
+                        props.fullRange[computedRange.min].toLocaleString('de-DE')
                     }}
                 </span>
             </div>
@@ -35,10 +37,11 @@
             <div class="flex-1 text-right">
                 <span class="minmax bg-secondary bg-opacity-30
                             py-1 px-2 rounded text-sm relative minmax--left whitespace-nowrap">
+                    <!-- locale string for Tsd. seperator -->
                     {{
                         props.fullRange[computedRange.max] === Infinity ?
-                        props.fullRange[rangeLength0Based - 1] + `+` :
-                        props.fullRange[computedRange.max]
+                        props.fullRange[rangeLength0Based - 1].toLocaleString('de-DE') + `+` :
+                        props.fullRange[computedRange.max].toLocaleString('de-DE')
                     }}
                 </span>
             </div>
@@ -116,18 +119,19 @@ function calculateGradient(baseColor, activeColor) {
 <style lang="postcss">
 .minmax::before {
     content: "";
-    border-width: 10px;
-    top: 10px;
-    left: 0;
-    transform: translateY(-100%);
+    border-width: 13px;
+    top: 49%;
+    right: 1px;
+    transform: translate(100%, -49%);
     position: absolute;
     border-color: transparent transparent transparent rgb(243, 213, 247);
     /* Triangle color */
 }
 
 .minmax--left::before {
-    right: 0;
-    left: auto;
+    right: unset;
+    left: 1px;
+    transform: translate(-100%, -49%);
     border-color: transparent rgb(243, 213, 247) transparent transparent;
 }
 
