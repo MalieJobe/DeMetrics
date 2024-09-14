@@ -2,7 +2,7 @@
 "faqs": [
   {
     "teaser": "Ist das ernst?",
-    "reveal": "Jain. Es ist ein Spaßprojekt, das auf realen Daten basiert. Die Daten sind ok genug um eine grobe Schätzung zu machen. Ob der Stil oder Charakter passen, und ob die Person überhaupt bock auf dich hat, kann so ein Rechner wohl kaum sagen."
+    "reveal": "Jain. Es ist ein Spaßprojekt, das auf realen Daten basiert. Die Daten sind ok genug um eine grobe Schätzung zu machen. Ob der Stil oder Charakter passen, und ob die Person überhaupt bock auf dich hat, kann so ein Rechner wohl kaum sagen. Das Projekt ist angelehnt an den <a href='https://igotstandardsbro.com/' target='_blank'>\"Female Delusion Calculator\"</a>."
   }, {
     "teaser": "Woher kommen die Daten?",
     "reveal": "Die Daten kommen aus verschiedenen Studien und Umfragen, die zum Großteil von Destatis durchgeführt wurden. Die genauen Quellen findest du unten auf der Seite."
@@ -14,13 +14,13 @@
     "reveal": "Nicht sehr genau. Wie in der vorherigen Frage beschrieben, werden die Prozentzahlen 'einfach' multipliziert. Hier werden viele Überschneidungen nicht berücksichtigt. Es kann zum Beispiel sein das Männer eine ganz andere Altersverteilung haben als Frauen. Das gleiche gilt für Einkommen (Gender Pay Gap), Gewicht etc. Leider gibt es solch granulare Daten nicht."
   }, {
     "teaser": "Warum werden nur Singles berücksichtigt?",
-    "reveal": "Klar, einige Menschen leben Polyamorös, haben ein offenes Beziehungsmodell oder gehen einfach Fremd. Auf der anderen Seite kann man argumentieren das einige Singles auch absichtlich Single sind, und somit garnicht 'zur Verfügung' stehen."
+    "reveal": "Klar, einige Menschen leben Polyamorös, haben ein offenes Beziehungsmodell oder gehen einfach Fremd. Auf der anderen Seite kann man argumentieren das einige Singles auch absichtlich Single sind, und somit garkein Interesse am Dating haben."
   }, {
-    "teaser": "Wie wird mit den Geschlechtsausprägungen 'unbekannt' oder 'divers' verfahren?",
-    "reveal": "Da diese Gruppe an Menschen klein ist, kann sie in Datenerhebungen oft nicht berücksichtigt werden. Für mehr Information siehe die Quellen zu 'Geschlecht' unten auf der Seite."
+    "teaser": "Wie wird mit den Geschlechtsausprägungen 'unbekannt' oder 'divers' umgegangen?",
+    "reveal": "Da diese Gruppe an Menschen klein ist, wird sie in Datenerhebungen oft nicht berücksichtigt. Meißt werden diese auf männlich und weiblich umverteilt. Für mehr Information siehe die Quellen zu 'Geschlecht', weiter unten auf der Seite."
   }, {
     "teaser": "Warum geht es erst bei 18 Jahren los?",
-    "reveal": "Natürlich ist es schade, jüngere Menschen auszuschließen die diesen Rechner gerne nutzen würden. Diese Entscheidung wurde getroffen um fragwürdiges Verhalten nicht zu fördern."
+    "reveal": "Natürlich ist es schade, jüngere Menschen auszuschließen die diesen Rechner gerne nutzen würden. Diese Entscheidung wurde getroffen um fragwürdiges Verhalten nicht unnötig zu fördern."
   }, {
     "teaser": "Was passiert mit meinen Eingaben / Daten?",
     "reveal": "Es werden keine Daten von dir gespeichert. Alles wird direkt nach der Berechnung verworfen."

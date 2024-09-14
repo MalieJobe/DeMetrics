@@ -23,8 +23,25 @@ provide('updateTotalPercentage', (p:any) => {
 });
 
 
+const genderText = computed(() => {
+  if (selectedGender.value === 'male') return ', männlichen';
+  if (selectedGender.value === 'female') return ', weiblichen';
+  return '';
+});
+
+const formattedPeopleCount = computed(() => {
+  const baseCount = 69763000;
+  const genderMultiplier = selectedGender.value === 'male' || selectedGender.value === 'female' ? 0.5 : 1;
+  const count = Math.floor(baseCount * genderMultiplier * percentageOfSelectedGender.value);
+  return count.toLocaleString('de-DE');
+})
+
+
 const {data: faqsData} = await useAsyncData('faqs', () => queryContent('faqs').findOne())
 const faqs = faqsData.value?.faqs;
+
+const {data: sourcesData} = await useAsyncData('sources', () => queryContent('sources').findOne())
+const sources = sourcesData.value?.sources;
 </script>
 
 <template>
@@ -45,102 +62,48 @@ const faqs = faqsData.value?.faqs;
         <Mainform
           @status-update="(newStatus)=>status = newStatus"
           @gender-select="(newGender)=>selectedGender = newGender" />
+
+        <div class="result mt-4 text-center">
+          <p class="text-5xl font-bold break-all text-balance max-w-3xl">
+            <span v-if="status === 'new'">XX,XXX %</span>
+            <span v-else-if="status === 'loading'">rechnet...</span>
+            <span v-else-if="status === 'error'">Fehler :/</span>
+            <span v-else>{{ (percentageOfSelectedGender * 100) }} %</span>
+          </p>
+          <p class="mt-2 text-lg max-w-96 mx-auto leading-6">
+            der erwachsenen, deutschen{{ genderText }} Singles entsprechen deinen Kriterien.
+          </p>
+          <p class="text-lg max-w-96 mx-auto leading-6" v-if="status === 'loaded'">
+            Das sind ungefähr <span class="font-bold">{{ formattedPeopleCount }} Menschen</span> in Deutschland.
+          </p> 
+        </div>
       </main>
 
-      <div class="result mt-4 text-center">
-        <p class="text-5xl font-bold break-all text-balance max-w-3xl">
-          <span v-if="status === 'new'">XX,XXX %</span>
-          <span v-else-if="status === 'loading'">rechnet...</span>
-          <span v-else-if="status === 'error'">Fehler :/</span>
-          <span v-else>{{ (percentageOfSelectedGender * 100) }} %</span>
-        </p>
-        <p class="mt-2 text-lg max-w-96 mx-auto leading-6">
-          der erwachsenen, deutschen{{ selectedGender === 'male' ? ', männlichen' : selectedGender === 'female' ? ', weiblichen' : '' }} Singles entsprechen deinen Kriterien.
-        </p>
-        <p class="text-lg max-w-96 mx-auto leading-6">
-          Das sind ungefähr <span class="font-bold">{{ Math.floor(69763000 * (selectedGender === 'male' || selectedGender === 'female' ? 0.5 : 1) * percentageOfSelectedGender).toLocaleString('de-DE') }} Menschen</span> in Deutschland.
-        </p>
-
-
-        <footer>
-          <FAQs :faqs />
-          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th class="px-6 py-3">Kategorie</th>
-                <th class="px-6 py-3">Quellen</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="px-6 py-4">Geschlecht</td>
-                <td class="px-6 py-4">
-                  <ul class="list-disc">
-                    <li>
-                  <a href="https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Bevoelkerungsstand/Tabellen/deutsche-nichtdeutsche-bevoelkerung-nach-geschlecht-deutschland.html" target="_blank">
-                    Bevölkerung nach Nationalität und Geschlecht - Statistisches Bundesamt (destatis.de)
-                  </a></li>
-                  <li>
-                  <a href="https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Bevoelkerungsstand/Methoden/Erlauterungen/geschlechtsauspraegungen.html" target="_blank">
-                    Wie wird mit den Daten von Personen mit den Geschlechtsausprägungen 'unbekannt' oder 'divers' verfahren? - Statistisches Bundesamt (destatis.de)
-                  </a>
-                  </li>
-                  </ul>
-                </td>
-              </tr>
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="px-6 py-4">Alter</td>
-                <td class="px-6 py-4">
-                  <a href="https://service.destatis.de/bevoelkerungspyramide/index.html#!y=2023" target="_blank">
-                    Bevölkerungspyramide: Altersstruktur Deutschlands von 1950 - 2070 (destatis.de)
-                  </a>
-                </td>
-              </tr>
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="px-6 py-4">Größe</td>
-                <td class="px-6 py-4">
-                  <a href="https://de.statista.com/statistik/daten/studie/1825/umfrage/koerpergroesse-nach-geschlecht/">
-                    Körpergröße nach Geschlecht 2006 | Statista
-                  </a>
-                </td>
-              </tr>
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="px-6 py-4">Köperbau</td>
-                <td class="px-6 py-4">
-                  <ul class="list-disc">
-                    <li>
-                  <a href="https://www.bpb.de/kurz-knapp/zahlen-und-fakten/soziale-situation-in-deutschland/516115/uebergewicht/" target="_blank" rel="noopener noreferrer">
-                    Übergewicht | Die soziale Situation in Deutschland | bpb.de
-                  </a></li>
-                  <li>
-                    <a href="https://www.rki.de/DE/Content/Kommissionen/Bundesgesundheitsblatt/Downloads/2019_10_Schienkiewitz_BMI.pdf?__blob=publicationFile" target="_blank" rel="noopener noreferrer">
-                      Tabelle 1: Body-Mass-Index von Kindern und Jugendlichen: Prävalenzen und Verteilung unter Berücksichtigung von Untergewicht und extremer Adipositas
-                    </a>
+      <footer class="">
+        <FAQs :faqs />
+        <table aria-label="Quellenangaben"
+          class="w-full text-sm text-left rtl:text-right text-gray-500">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+            <tr>
+              <th class="px-6 py-3">Kategorie</th>
+              <th class="px-6 py-3">Quellen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(category, index) in sources" :key="index" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+              <td class="px-6 py-4">{{ category.name }}</td>
+              <td class="px-6 py-4">
+                <ul v-if="category.links.length > 1" class="list-disc">
+                  <li v-for="(link, linkIndex) in category.links" :key="linkIndex">
+                    <a :href="link.url" target="_blank" rel="noopener noreferrer">{{ link.text }}</a>
                   </li>
                 </ul>
-                </td>
-              </tr>
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="px-6 py-4">Einkommen</td>
-                <td class="px-6 py-4">
-                  <a href="https://www.einkommensverteilung.eu/deutschland/" target="_blank">
-                    Einkommensverteilung Deutschland | einkommensverteilung.eu
-                  </a>
-                </td>
-              </tr>
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="px-6 py-4">Beziehungsstatus</td>
-                <td class="px-6 py-4">
-                  <a href="https://de.statista.com/statistik/daten/studie/286794/umfrage/umfrage-in-deutschland-zur-anzahl-der-singles-nach-alter/" target="_blank">
-                    Singles in Deutschland nach Alter 2021 | Statista
-                  </a>
-                </td>
-              </tr>
-              
-            </tbody>
-          </table>
-        </footer>
-      </div>
+                <a v-else :href="category.links[0].url" target="_blank" rel="noopener noreferrer">{{ category.links[0].text }}</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </footer>
     </div>
   </div>
 </template>
