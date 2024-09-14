@@ -131,10 +131,10 @@
     "Infinity"
   ],
   "weight": [
-    "underweight",
-    "normal",
-    "overweight",
-    "obese"
+    "schlank",
+    "durchnittlich",
+    "kurvig",
+    "mehrgewichtig"
   ],
   "income": [
     "-Infinity",

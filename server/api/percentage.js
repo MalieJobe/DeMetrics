@@ -4,35 +4,33 @@ export default defineEventHandler(async (event) => {
     try {
         const queryParameters = getQuery(event);
 
-        // Define the TypeScript type for valid parameters
-        type ValidParameters = {
-            minAge?: number, maxAge?: number,
-            minHeight?: number, maxHeight?: number,
-            minWeight?: 'underweight' | 'normal' | 'overweight' | 'obese', maxWeight?: 'underweight' | 'normal' | 'overweight' | 'obese',
-            minIncome?: number, maxIncome?: number,
-            gender?: 'total' | 'male' | 'female', isSingle?: Boolean;
+        const weightOptions = ['schlank', 'durchnittlich', 'kurvig', 'mehrgewichtig'];
+        const genderOptions = ['total', 'male', 'female'];
+        const parameterSchema = {
+            minAge: "number", maxAge: "number",
+            minHeight: "number", maxHeight: "number",
+            minWeight: weightOptions, maxWeight: weightOptions,
+            minIncome: "number", maxIncome: "number",
+            gender: genderOptions, isSingle: "boolean",
         };
+        const validParameters = {};
 
-        const validParameterTypes = {
-            minAge: 'number', maxAge: 'number',
-            minHeight: 'number', maxHeight: 'number',
-            minWeight: ['underweight', 'normal', 'overweight', 'obese'], maxWeight: ['underweight', 'normal', 'overweight', 'obese'],
-            minIncome: 'number', maxIncome: 'number',
-            gender: ['total', 'male', 'female'], isSingle: 'boolean',
-        };
-
-        // Initialize valid parameters
-        const validParameters: ValidParameters = {};
-
-        // Validate and process query parameters
-        for (const [key, type] of Object.entries(validParameterTypes)) {
+        for (const [key, type] of Object.entries(parameterSchema)) {
             if (queryParameters[key] !== undefined && queryParameters[key] !== null) {
-                if (type === 'number' && typeof +queryParameters[key] === type) validParameters[key] = +queryParameters[key];
-                else if (type === 'boolean') validParameters[key] = queryParameters[key] === 'true';
-                else if (validParameterTypes[key].includes(queryParameters[key])) validParameters[key] = queryParameters[key];
-                else {
-                    setResponseStatus(event, 400);
-                    return { error: `Invalid type for query parameter ${key}. Expected ${type}.` };
+                if (type === "number") {
+                    validParameters[key] = parseFloat(queryParameters[key]);
+                }
+                else if (type === "boolean") {
+                    validParameters[key] = queryParameters[key] === "true"; // Convert string to boolean
+                }
+                else if (Array.isArray(type)) {
+                    if (type.includes(queryParameters[key])) {
+                        validParameters[key] = queryParameters[key];
+                    }
+                    else {
+                        setResponseStatus(event, 400);
+                        return { error: `Invalid value for query parameter ${key}. Expected one of ${type.join(", ")}.` };
+                    }
                 }
             }
         }
@@ -44,9 +42,16 @@ export default defineEventHandler(async (event) => {
         }
 
         // replace any Infinity or -Infinity values with quotes arount it like 'Infinity' or '-Infinity'
+        // replace weight values with english names for the database
         for (const key in validParameters) {
             if (validParameters[key] === Infinity || validParameters[key] === -Infinity) {
                 validParameters[key] = `'${validParameters[key]}'`;
+            }
+            if (key === 'minWeight' || key === 'maxWeight') {
+                validParameters[key] = validParameters[key].replace('schlank', 'underweight')
+                    .replace('durchnittlich', 'normal')
+                    .replace('kurvig', 'overweight')
+                    .replace('mehrgewichtig', 'obese');
             }
         }
 
@@ -118,6 +123,6 @@ export default defineEventHandler(async (event) => {
         };
     } catch (error) {
         setResponseStatus(event, 500);
-        return { error: (error as Error).stack };
+        return { error: error.stack };
     }
 });
