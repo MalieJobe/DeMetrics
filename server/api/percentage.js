@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import DBConnector from "../DBConnector";
 
 export default defineEventHandler(async (event) => {
     try {
@@ -41,12 +41,8 @@ export default defineEventHandler(async (event) => {
             return { data: 1, status: `No matching query parameters were found. Returning 1.` };
         }
 
-        // replace any Infinity or -Infinity values with quotes arount it like 'Infinity' or '-Infinity'
         // replace weight values with english names for the database
         for (const key in validParameters) {
-            if (validParameters[key] === Infinity || validParameters[key] === -Infinity) {
-                validParameters[key] = `'${validParameters[key]}'`;
-            }
             if (key === 'minWeight' || key === 'maxWeight') {
                 validParameters[key] = validParameters[key].replace('schlank', 'underweight')
                     .replace('durchnittlich', 'normal')
@@ -55,15 +51,22 @@ export default defineEventHandler(async (event) => {
             }
         }
 
+        const dbFilePath = './server/data/demographics.sqlite';
+        const dbc = await DBConnector.getInstance(dbFilePath);
+
         let totalPercentage = 1;
         let totalSinglePercentage = 1;
         let totalOfSelectedGender = 1;
 
+        console.log(validParameters)
+
         // Query database using Vercel Postgres based on parameters
         if (validParameters.minAge || validParameters.maxAge) {
             const { minAge = 14, maxAge = 100, gender = 'total' } = validParameters;
-            const { rows } = await sql.query(`SELECT SUM(${gender}::numeric) AS percentage FROM age WHERE age_min >= ${minAge} AND age_max <= ${maxAge}`);
-            const p_age = Math.min(rows[0]?.percentage ?? 1, 1);
+            const sql = `SELECT SUM(${gender})  AS percentage FROM age WHERE age_min >= ? AND age_max <= ?`;
+            const res =  await dbc.getSingleValues(sql, [minAge, maxAge]);
+            console.log("Age", res)
+            const p_age = Math.min(res, 1)
             totalPercentage *= p_age;
             totalSinglePercentage *= p_age;
             totalOfSelectedGender *= p_age;
@@ -71,11 +74,13 @@ export default defineEventHandler(async (event) => {
 
         if (validParameters.minHeight || validParameters.maxHeight) {
             const { minHeight = 0, maxHeight = 300, gender = 'total' } = validParameters;
-            const query = gender === 'total'
-                ? sql.query(`SELECT SUM(female + male) / 2 AS percentage FROM height WHERE height_min <= ${maxHeight} AND height_max >= ${minHeight}`)
-                : sql.query(`SELECT SUM(${gender}) AS percentage FROM height WHERE height_min <= ${maxHeight} AND height_max >= ${minHeight}`);
-            const { rows } = await query;
-            const p_height = Math.min(rows[0]?.percentage ?? 1, 1);
+
+            const sql = gender === 'total'
+                ? `SELECT SUM(female + male) / 2 AS percentage FROM height WHERE height_min <= ? AND height_max >= ?`
+                : `SELECT SUM(${gender}) AS percentage FROM height WHERE height_min <= ? AND height_max >= ?`;
+            const res = await dbc.getSingleValues(sql, [maxHeight, minHeight]);
+            console.log("height", res)
+            const p_height = Math.min(res, 1);
             totalPercentage *= p_height;
             totalSinglePercentage *= p_height;
             totalOfSelectedGender *= p_height;
@@ -83,8 +88,10 @@ export default defineEventHandler(async (event) => {
 
         if (validParameters.minIncome || validParameters.maxIncome) {
             const { minIncome = `'-Infinity'`, maxIncome = `'Infinity'` } = validParameters;
-            const { rows } = await sql.query(`SELECT SUM(percent) AS percentage FROM income WHERE income_min <= ${maxIncome} AND income_max >= ${minIncome}`);
-            const p_income = Math.min(rows[0]?.percentage ?? 1, 1);
+            const sql = `SELECT SUM(percent) AS percentage FROM income WHERE income_min <= ? AND income_max >= ?`;
+            const res = await dbc.getSingleValues(sql, [maxIncome, minIncome]);
+            console.log("income", res)
+            const p_income = Math.min(res, 1);
             totalPercentage *= p_income;
             totalSinglePercentage *= p_income;
             totalOfSelectedGender *= p_income;
@@ -98,11 +105,13 @@ export default defineEventHandler(async (event) => {
                 weightCategories.indexOf(maxWeight) + 1
             );
 
-            const query = gender === 'total'
-                ? sql.query(`SELECT SUM(${selectedWeights.join(' + ')}) / COUNT(${selectedWeights[0]}) AS percentage FROM weight WHERE age_max >= ${minAge} AND age_min <= ${maxAge}`)
-                : sql.query(`SELECT SUM(${selectedWeights.join(' + ')}) / COUNT(${selectedWeights[0]}) AS percentage FROM weight WHERE age_max >= ${minAge} AND age_min <= ${maxAge} AND gender = '${gender}'`);
-            const { rows } = await query;
-            const p_weight = Math.min(rows[0]?.percentage ?? 1, 1);
+            const sql = gender === 'total'
+            ? `SELECT SUM(${selectedWeights.join(' + ')}) / COUNT(${selectedWeights[0]}) AS percentage FROM weight WHERE age_max >= ? AND age_min <= ?`
+            : `SELECT SUM(${selectedWeights.join(' + ')}) / COUNT(${selectedWeights[0]}) AS percentage FROM weight WHERE age_max >= ? AND age_min <= ? AND gender = ?`;
+            const params = gender === 'total' ? [minAge, maxAge] : [minAge, maxAge, gender];
+            const res = await dbc.getSingleValues(sql, params);
+            console.log("weight", res)
+            const p_weight = Math.min(res, 1);
             totalPercentage *= p_weight;
             totalSinglePercentage *= p_weight;
             totalOfSelectedGender *= p_weight;
@@ -110,8 +119,10 @@ export default defineEventHandler(async (event) => {
 
         if (validParameters.gender) {
             const { gender = 'total' } = validParameters;
-            const { rows } = await sql.query(`SELECT percentage FROM gender WHERE gender = '${gender}'`);
-            const p_gender = Math.min(rows[0]?.percentage ?? 1, 1);
+            const sql = `SELECT percentage FROM gender WHERE gender = ?`;
+            const res = await dbc.getSingleValues(sql, [gender]);
+            console.log("gender", res)
+            const p_gender = Math.min(res, 1);
             totalPercentage *= p_gender;
             totalSinglePercentage *= p_gender;
         }
